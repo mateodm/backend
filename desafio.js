@@ -17,13 +17,10 @@ class ProductManager {
     async getProductByID(id) {
         let producto = await this.getProducts()
         let check = producto.find((prod) => prod.id === id)
-        if (check) {
-            return check
-
+        if(!check) {
+            throw new Error ("Product not found")
         }
-        else if (!check) {
-            throw new Error("Product not found")
-        }
+        return check
     }
     async idGenerator(products, product) {
         if (products.length === 0) {
@@ -36,6 +33,17 @@ class ProductManager {
 
     }
     async addProduct(title, description, price, thumbnail, code, stock) {
+        const producto = await this.getProducts()
+        let productCODEFind = producto.find((product) => product.code === code)
+
+        if (productCODEFind) {
+            throw new Error("El producto ya existe")
+        } 
+        else if ( !title  || !description || !price || !thumbnail || !code ) {
+            throw new Error("Falta completar uno de los campos del producto solicitado")
+        } 
+        else if (!productCODEFind) {
+            
         const newProduct = {
             id: 0,
             title,
@@ -45,18 +53,9 @@ class ProductManager {
             code,
             stock,
         }
-        const producto = await this.getProducts()
-        let productCODEFind = producto.find((product) => product.code === code)
-        if (stock === undefined) {
-            newProduct.stock = 0
-        }
-        if (productCODEFind) {
-            throw new Error("El producto ya existe")
-        } 
-        else if (newProduct.title === undefined || newProduct.description === undefined || newProduct.price === undefined || newProduct.thumbnail === undefined || newProduct.code === undefined) {
-            throw new Error("Falta completar uno de los campos del producto solicitado")
-        } 
-        else if (!productCODEFind) {
+            if (!stock) {
+                newProduct.stock = 0
+            }
             await this.idGenerator(producto, newProduct)
             await fs.promises.writeFile(this.#path, JSON.stringify([...producto, newProduct]))
         }
@@ -88,7 +87,7 @@ class ProductManager {
                     await fs.promises.writeFile(this.#path, JSON.stringify(thumbnailUpdate))
                     break;
                 case "price":
-                    if (!isNaN(dataToUpdate) === false) {
+                    if (!isNaN(dataToUpdate)) {
                         console.log(dataToUpdate)
                         throw new Error("En el caso de querer actualizar price, tienes que ingresar un numero.")
                     }
@@ -98,7 +97,7 @@ class ProductManager {
                     }
                     break;
                 case "stock":
-                    if (!isNaN(dataToUpdate) === false) {
+                    if (!isNaN(dataToUpdate)) {
                         throw new Error("En el caso de querer actualizar stock, tienes que ingresar un numero.")
                     }
                     else {
@@ -111,10 +110,12 @@ class ProductManager {
     }
     async deleteProduct(id) {
         let producto = await this.getProducts()
-        let deleted = producto.find((producto) => producto.id === id)
-        if (deleted) {
+        let check = producto.find((producto) => producto.id === id)
+        if (check) {
+            let filter = producto.filter((producto) => producto.id !== id)
+            await fs.promises.writeFile(this.#path, JSON.stringify(filter))
 
-        } else if (!deleted) {
+        } else if (!check) {
             throw new Error("El id indicado no coincide con ninguno existente")
         }
 
@@ -132,12 +133,7 @@ async function test() {
     await manager.addProduct("Producto6", "Descripcion", 500, "img.jpg", "150")
     await manager.addProduct("Producto7", "Descripcion", 500, "img.jpg", "155")
     await manager.addProduct("Producto8", "Descripcion", 500, "img.jpg", "156")
-    /* ERROR FORZADO DE QUE FALTA UN CAMPO */
-    await manager.addProduct("Producto8", "Descripcion", 500, "img.jpg")
-    /* PRUEBA DE UPDATE */
-    await manager.updateProduct(2, "description", "Updated Product")
-    /* PRUEBA OBTENER PRODUCTO X ID */
-    await manager.getProductByID(3)
+    await manager.deleteProduct(4)
 
 }
 
