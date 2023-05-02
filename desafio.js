@@ -15,6 +15,7 @@ class ProductManager {
         }
     }
     async getProductByID(id) {
+        let producto = await this.getProducts()
         let check = producto.find((prod) => prod.id === id)
         if (check) {
             return check
@@ -120,11 +121,12 @@ async function test() {
     const manager = new ProductManager("./products.json");
 
 
-/* await manager.updateProduct(0, "stock", 8) */
 await manager.addProduct("Producto5", "Descripcion", 400, "img.jpg", "148")
 await manager.addProduct("Producto6", "Descripcion", 500, "img.jpg", "150")
 await manager.addProduct("Producto7", "Descripcion", 500, "img.jpg", "155")
 await manager.addProduct("Producto8", "Descripcion", 500, "img.jpg", "156")
+await manager.updateProduct(2, "description", "Updated Product")
+await manager.getProductByID(3)
 
 }
 
