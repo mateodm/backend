@@ -1,6 +1,6 @@
-const fs = require('fs')
-
-class ProductManager {
+/* const fs = require('fs') */
+import fs from "fs"
+export default class ProductManager {
     #path;
     constructor(path) {
         this.#path = path;
@@ -33,17 +33,18 @@ class ProductManager {
 
     }
     async addProduct(title, description, price, thumbnail, code, stock) {
+        
         const producto = await this.getProducts()
+
         let productCODEFind = producto.find((product) => product.code === code)
 
         if (productCODEFind) {
-            throw new Error("El producto ya existe")
+            throw new Error("El código asignado ya se encuentra en otro producto")
         } 
         else if ( !title  || !description || !price || !thumbnail || !code ) {
             throw new Error("Falta completar uno de los campos del producto solicitado")
         } 
-        else if (!productCODEFind) {
-            
+        else if (!productCODEFind) {  /* Si todos las condiciones se cumplen, se crea el objeto */
         const newProduct = {
             id: 0,
             title,
@@ -53,7 +54,7 @@ class ProductManager {
             code,
             stock,
         }
-            if (!stock) {
+            if (!stock) { /* En caso de no especificar el stock, se creara con 0 */
                 newProduct.stock = 0
             }
             await this.idGenerator(producto, newProduct)
@@ -121,22 +122,16 @@ class ProductManager {
 
     }
 }
+/* MANAGER */
+const manager = new ProductManager("./src/json/products.json"); 
 
-
-
-/* PRUEBA */
-async function test() {
-    const manager = new ProductManager("./products.json");
-
-    /* Agregar productos y autoincrementar ID´s */
-    await manager.addProduct("Producto5", "Descripcion", 400, "img.jpg", "148")
-    await manager.addProduct("Producto6", "Descripcion", 500, "img.jpg", "150")
-    await manager.addProduct("Producto7", "Descripcion", 500, "img.jpg", "155")
-    await manager.addProduct("Producto8", "Descripcion", 500, "img.jpg", "156")
-    await manager.deleteProduct(4)
-
-}
-
+/*  async function test() {
+    await manager.addProduct("producto1", "descripcion", 120000, "producto.jpg", "ABC", 3)
+    await manager.addProduct("producto2", "descripcion", 800, "producto.jpg", "ABCD", 5)
+    await manager.addProduct("producto3", "descripcion", 1500, "producto.jpg", "ABCE", 2)
+    await manager.addProduct("producto4", "descripcion", 2000, "producto.jpg", "ABCA")
+} 
 test()
+ */
 
 
