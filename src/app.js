@@ -78,7 +78,7 @@ let carts_id_function = async (req, res) => {
     let cart = await cmanager.getCartByID(id)
     if(cart) {
         return res.send({
-            success: true;
+            success: true,
             cart
         })
     }
