@@ -18,7 +18,7 @@ export default class ProductManager {
         let producto = await this.getProducts()
         let check = producto.find((prod) => prod.id === id)
         if(!check) {
-            throw new Error ("Product not found")
+            return
         }
         return check
     }
@@ -58,7 +58,8 @@ export default class ProductManager {
                 newProduct.stock = 0
             }
             await this.idGenerator(producto, newProduct)
-            await fs.promises.writeFile(this.#path, JSON.stringify([...producto, newProduct]))
+            producto.push(newProduct)
+            await fs.promises.writeFile(this.#path, JSON.stringify(producto))
         }
     }
 
@@ -126,12 +127,8 @@ export default class ProductManager {
 const manager = new ProductManager("./src/json/products.json"); 
 
 /*  async function test() {
-    await manager.addProduct("producto1", "descripcion", 120000, "producto.jpg", "ABC", 3)
-    await manager.addProduct("producto2", "descripcion", 800, "producto.jpg", "ABCD", 5)
-    await manager.addProduct("producto3", "descripcion", 1500, "producto.jpg", "ABCE", 2)
-    await manager.addProduct("producto4", "descripcion", 2000, "producto.jpg", "ABCA")
+
 } 
 test()
- */
-
+  */
 

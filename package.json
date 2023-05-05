@@ -17,9 +17,9 @@
     "url": "https://github.com/mateodm/backend/issues"
   },
   "homepage": "https://github.com/mateodm/backend#readme",
-  "description": "",
   "dependencies": {
     "express": "^4.18.2",
     "nodemon": "^2.0.22"
-  }
+  },
+  "description": ""
 }
