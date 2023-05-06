@@ -60,10 +60,12 @@ export default class ProductManager {
             await this.idGenerator(producto, newProduct)
             producto.push(newProduct)
             await fs.promises.writeFile(this.#path, JSON.stringify(producto))
+            return newProduct
         }
     }
 
     async updateProduct(id, selectedParameter, dataToUpdate) {
+        console.log(id, selectedParameter, dataToUpdate)
         if (id === undefined || selectedParameter === undefined || dataToUpdate === undefined) {
             throw new Error("No ingresaste los parametros correspondientes")
         }
@@ -89,22 +91,25 @@ export default class ProductManager {
                     await fs.promises.writeFile(this.#path, JSON.stringify(thumbnailUpdate))
                     break;
                 case "price":
-                    if (!isNaN(dataToUpdate)) {
-                        console.log(dataToUpdate)
-                        throw new Error("En el caso de querer actualizar price, tienes que ingresar un numero.")
+                    let price = parseInt(dataToUpdate)
+                    console.log(price)
+                    console.log(isNaN(price))
+                    if (price >= 0) {
+                        const priceUpdate = await products.map((products) => products.id === id ? { ...products, price: price } : products)
+                        await fs.promises.writeFile(this.#path, JSON.stringify(priceUpdate))
                     }
                     else {
-                        const priceUpdate = await products.map((products) => products.id === id ? { ...products, price: dataToUpdate } : products)
-                        await fs.promises.writeFile(this.#path, JSON.stringify(priceUpdate))
+                        throw new Error("En el caso de querer actualizar price, tienes que ingresar un numero.")
                     }
                     break;
                 case "stock":
-                    if (!isNaN(dataToUpdate)) {
-                        throw new Error("En el caso de querer actualizar stock, tienes que ingresar un numero.")
+                    let stock = parseInt(dataToUpdate)
+                    if (stock >= 0) {
+                        const stockUpdate = await products.map((products) => products.id === id ? { ...products, stock: stock } : products)
+                        await fs.promises.writeFile(this.#path, JSON.stringify(stockUpdate))
                     }
                     else {
-                        const stockUpdate = await products.map((products) => products.id === id ? { ...products, stock: dataToUpdate } : products)
-                        await fs.promises.writeFile(this.#path, JSON.stringify(stockUpdate))
+                        throw new Error("En el caso de querer actualizar stock, tienes que ingresar un numero.")
                     }
                     break;
             }
@@ -113,14 +118,15 @@ export default class ProductManager {
     async deleteProduct(id) {
         let producto = await this.getProducts()
         let check = producto.find((producto) => producto.id === id)
-        if (check) {
+/*         if (check) {
             let filter = producto.filter((producto) => producto.id !== id)
-            await fs.promises.writeFile(this.#path, JSON.stringify(filter))
+            cart.push(filter)
+            await fs.promises.writeFile(this.#path, JSON.stringify(cart))
 
         } else if (!check) {
             throw new Error("El id indicado no coincide con ninguno existente")
         }
-
+ */
     }
 }
 /* MANAGER */

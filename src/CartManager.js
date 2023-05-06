@@ -8,17 +8,23 @@ export default class CartManager {
     constructor(path) {
         this.#path = path
     }
-    async addProductInACart( cid, pid, quantity) {
+    async addProduct( cid, pid, quantity) {
         const getProductByID = await pManager.getProductByID(pid)
         const cart = await this.getCartByID(cid)
         let carts = await this.getCarts()
-        if (pid === getProductByID.id && cid === cart.id ) {
+        let newStock = getProductByID.stock - quantity
+        if (pid === getProductByID.id && cid === cart.id && newStock >= 0) {
+            await pManager.updateProduct(pid, "stock", newStock)
             carts.forEach((carts) => {
                     if(cid === carts.id) {
-                        carts.products.push({ productID: cid, quantity: quantity})
+                        carts.products.push({ productID: pid, quantity: quantity})
                     }
             })
             await fs.promises.writeFile(this.#path, JSON.stringify(carts))
+            return (`the product(${pid}) with ${quantity} units has been added succesfully`)
+        }
+        else if (Math.sign(newStock) === -1) {
+            return (`you have ordered more quantity than we have in stock (${getProductByID.stock}), please try again with a correct quantity.`)
         }
         else {
             console.log("Product not found or cart not found")
@@ -33,6 +39,7 @@ export default class CartManager {
         await this.idGenerator(carts, newCart)
         carts.push(newCart)
         await fs.promises.writeFile(this.#path, JSON.stringify(carts))
+        return carts
     }
     async getCarts() {
         try {
@@ -62,5 +69,13 @@ export default class CartManager {
         else {
             return cart.id = carts.length + 1;
         };
+    }
+    async deleteProduct(cid, pid) {
+        let carts = await this.getCarts()
+        let cart = carts.find(c => c.id === cid)
+        let cartObjetive = cart.products
+        let filter = cartObjetive.filter((c) => c.ProductID !== pid)
+        await fs.promises.writeFile(this.#path, JSON.stringify(filter))
+/*         cartObjetive.map((c) => c.id === pid ? cartObjetive.slice() : c) */
     } 
 }
