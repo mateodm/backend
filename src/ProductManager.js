@@ -118,7 +118,7 @@ export default class ProductManager {
     async deleteProduct(id) {
         let producto = await this.getProducts()
         let check = producto.find((producto) => producto.id === id)
-/*         if (check) {
+        if (check) {
             let filter = producto.filter((producto) => producto.id !== id)
             cart.push(filter)
             await fs.promises.writeFile(this.#path, JSON.stringify(cart))
@@ -126,7 +126,7 @@ export default class ProductManager {
         } else if (!check) {
             throw new Error("El id indicado no coincide con ninguno existente")
         }
- */
+
     }
 }
 /* MANAGER */

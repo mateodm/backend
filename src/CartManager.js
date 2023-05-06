@@ -74,8 +74,8 @@ export default class CartManager {
         let carts = await this.getCarts()
         let cart = carts.find(c => c.id === cid)
         let cartObjetive = cart.products
-        let filter = cartObjetive.filter((c) => c.ProductID !== pid)
+/*         let filter = cartObjetive.filter((c) => c.ProductID !== pid)
         await fs.promises.writeFile(this.#path, JSON.stringify(filter))
-/*         cartObjetive.map((c) => c.id === pid ? cartObjetive.slice() : c) */
+/*         cartObjetive.map((c) => c.id === pid ? cartObjetive.slice() : c) */ 
     } 
 }
