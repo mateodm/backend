@@ -39,10 +39,10 @@ export default class ProductManager {
         let productCODEFind = producto.find((product) => product.code === code)
 
         if (productCODEFind) {
-            throw new Error("El código asignado ya se encuentra en otro producto")
+            return (`the code ${code} is already in use, try again with another code`)
         } 
         else if ( !title  || !description || !price || !thumbnail || !code ) {
-            throw new Error("Falta completar uno de los campos del producto solicitado")
+            return ("missing camps")
         } 
         else if (!productCODEFind) {  /* Si todos las condiciones se cumplen, se crea el objeto */
         const newProduct = {
@@ -60,12 +60,11 @@ export default class ProductManager {
             await this.idGenerator(producto, newProduct)
             producto.push(newProduct)
             await fs.promises.writeFile(this.#path, JSON.stringify(producto))
-            return newProduct
+            return (`The product ${title} has been added succesfully`)
         }
     }
 
     async updateProduct(id, selectedParameter, dataToUpdate) {
-        console.log(id, selectedParameter, dataToUpdate)
         if (id === undefined || selectedParameter === undefined || dataToUpdate === undefined) {
             throw new Error("No ingresaste los parametros correspondientes")
         }
@@ -99,7 +98,7 @@ export default class ProductManager {
                         await fs.promises.writeFile(this.#path, JSON.stringify(priceUpdate))
                     }
                     else {
-                        throw new Error("En el caso de querer actualizar price, tienes que ingresar un numero.")
+                        return("En el caso de querer actualizar price, tienes que ingresar un numero.")
                     }
                     break;
                 case "stock":
@@ -109,7 +108,7 @@ export default class ProductManager {
                         await fs.promises.writeFile(this.#path, JSON.stringify(stockUpdate))
                     }
                     else {
-                        throw new Error("En el caso de querer actualizar stock, tienes que ingresar un numero.")
+                        return("En el caso de querer actualizar stock, tienes que ingresar un numero.")
                     }
                     break;
             }
@@ -120,8 +119,8 @@ export default class ProductManager {
         let check = producto.find((producto) => producto.id === id)
         if (check) {
             let filter = producto.filter((producto) => producto.id !== id)
-            cart.push(filter)
-            await fs.promises.writeFile(this.#path, JSON.stringify(cart))
+            producto.push(filter)
+            await fs.promises.writeFile(this.#path, JSON.stringify(producto))
 
         } else if (!check) {
             throw new Error("El id indicado no coincide con ninguno existente")

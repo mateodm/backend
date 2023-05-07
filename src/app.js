@@ -63,7 +63,6 @@ let products_id_function = async (req, res) => {
 let carts_route = "/api/carts"
 let carts_function = async(req, res) => {
     let carts = await cmanager.getCarts()
-    console.log(carts)
     if(carts) {
         return res.send({
             success: true,
@@ -112,8 +111,8 @@ server.post("/api/products", async (req, res) => {
             let product = await manager.addProduct(title, description, price, thumbnail, code, stock )
             return res.json({
                 status: 201,
-                id: product.id,
                 success: true,
+                message: product,
             })
         }
         else {
@@ -218,8 +217,8 @@ server.put("/api/carts/:cid/products/:pid", async (req, res) => {
 server.delete("/api/carts/:cid/products/:pid", async (req, res) => {
     let cid = Number(req.params.cid)
     let pid = Number(req.params.pid)
-    let deleteProduct = await cmanager.deleteProduct(cid, pid)
-    if(deleteproduct) {
+    if(cid && pid) {
+        let deleteProduct = await cmanager.deleteProduct(cid, pid)
         return res.json({
             success: true,
             status: 200,
@@ -231,6 +230,31 @@ server.delete("/api/carts/:cid/products/:pid", async (req, res) => {
             success: false,
             status: 404,
             message: ("missing params")
+        })
+    }
+})
+server.delete("/api/carts/:cid", async (req, res) => {
+    let cid = Number(req.params.cid)
+    let deleteCart = await cmanager.deleteCart(cid)
+    if (deleteCart === true) {
+        return res.json({
+            success: true,
+            status: 200,
+            message: (`The cart (ID ${cid}) has been removed succesfully`)
+        })
+    }
+    else if (deleteCart === false) {
+        return res.json({
+            success: false,
+            status: 404,
+            message: ("cart not founded"),
+        })
+    }
+    else if (!cid){
+        return res.json({
+            success: false,
+            status: 404,
+            message: ("missing params"),
         })
     }
 })
