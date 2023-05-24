@@ -1,0 +1,70 @@
+<header>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <div class="container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#navbarExample01"
+        aria-controls="navbarExample01"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarExample01">
+        <ul class="navbar-nav me-auto d-flex justify-content-center align-items-center mb-2 mb-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link text-white" aria-current="page" href="/">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/chat">Chat</a>
+          </li>
+          <li class="nav-item">
+            <a href="/cart"><img  class="carrito" src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
+            <span class="numero text-white">{{length.length}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
+
+<div class="row body">
+{{#each products}}
+    <div class="card col-md-4 my-5 mb-5 mx-5" style="width: 18rem;">
+  <img src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{this.title}}</h5>
+    <p class="card-text">{{this.description}}</p>
+    <a href="/products/{{this.id}}" class="btn btn-primary">Ver más información</a>
+  </div>
+</div>
+{{/each}}
+
+</div>
+
+<style type="text/css">
+   .carrito {
+    height: 3.4vh;
+   }
+    .numero { 
+    background-color: black;
+    border-radius: 100%;
+    padding: 6px;
+    font-size: 14px;
+   }
+</style>
+
+
+  <!-- Copyright -->
+  <div class="text-center text-white p-3" style="background-color: blue;">
+    © 2020 Copyright:
+    <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
