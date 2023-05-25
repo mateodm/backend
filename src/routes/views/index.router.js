@@ -21,6 +21,16 @@ router.get("/new_product", async (req, res) => {
     let length = cart.products
     return res.render("newproduct",{ length: length})
 })
+router.get("/chat", async (req, res, next) => {
+    try {
+        return res.render("chat", {
+          script: "chat.js",
+        });
+      } catch (error) {
+        next(error);
+      }
+    });
+    
 
 router.use("/products", productsRouter)
 router.use("/cart", cartsRouter)
