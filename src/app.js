@@ -1,24 +1,32 @@
 /* IMPORTS */
 import express, {query} from "express"
+import "dotenv/config.js"
+import logger from "morgan";
 import router from "./routes/index.router.js"
 import ProductManager from "./ProductManager.js"
 import CartManager from "./CartManager.js"
 import { engine } from "express-handlebars"
 import { __dirname, __filename } from "./utils.js"
+import errorHandler from "./middlewares/errorHandler.js";
+import notFoundHandler from "./middlewares/notFoundHandler.js";
 
 /* SERVER CONFIG */
+const server = express()
 
-let server = express()
-let port = 8080
-let manager = new ProductManager("./src/json/products.json");
-let cmanager = new CartManager("./src/json/carts.json")
-let working = () => console.log("server ready on port " + port)
 /* HANDLERBARS */
-server.engine("handlebars", engine())
-server.set("view engine", "handlebars")
-server.set("views", __dirname + "/views")
+server.engine("handlebars", engine());
+server.set("view engine", "handlebars");
+server.set("views", __dirname + "/views");
 
-server.listen(port, working)
-server.use(express.urlencoded({extended:true}))
-server.use(express.json())
-server.use("/", router)
+server.use(express.urlencoded({extended:true}));
+server.use(express.json());
+server.use("/", router);
+server.use(logger("dev"));
+
+/* Error Handler */
+
+server.use(errorHandler);
+server.use(notFoundHandler)
+
+
+export default server;
