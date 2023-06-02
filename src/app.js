@@ -1,6 +1,6 @@
 /* IMPORTS */
 import express, {query} from "express"
-import "dotenv/config.js"
+import "dotenv/config.js";
 import logger from "morgan";
 import router from "./routes/index.router.js"
 import ProductManager from "./ProductManager.js"
@@ -18,9 +18,12 @@ server.engine("handlebars", engine());
 server.set("view engine", "handlebars");
 server.set("views", __dirname + "/views");
 
-server.use(express.urlencoded({extended:true}));
 server.use(express.json());
 server.use("/", router);
+/* ACCEDER ARCHIVOS EN PUBLIC (ERROR ANTERIOR) */
+server.use("/public", express.static("public"))
+server.use(express.urlencoded({extended:true}));
+
 server.use(logger("dev"));
 
 /* Error Handler */
