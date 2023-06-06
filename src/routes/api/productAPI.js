@@ -10,7 +10,7 @@ let cmanager = new CartManager("./src/json/carts.json")
 
 /* AÑADIR PRODUCTO */
 router.post("/post", async (req, res) => {
-    let title = req.body.title ?? null
+        let title = req.body.title ?? null
         let description = req.body.description ?? null
         let price = req.body.price ?? null
         let thumbnail = req.body.thumbnail ?? null

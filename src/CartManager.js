@@ -81,6 +81,7 @@ export default class CartManager {
                 let products = check.products
                 let product = await pManager.getProductByID(pid)
                 let quantity = products.find(product => product.productID === pid)
+                console.log(quantity)
                 let newStock = product.stock + quantity.quantity
                 await pManager.updateProduct(pid, "stock", newStock)
                 /* FILTRO */
@@ -107,3 +108,4 @@ export default class CartManager {
             
         }
 }
+

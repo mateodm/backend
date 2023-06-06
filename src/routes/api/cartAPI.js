@@ -13,11 +13,13 @@ router.post("/:cid/products/:pid", async (req, res) => {
     let cid = Number(req.params.cid);
     let pid = Number(req.params.pid);
     let quantity = Number(req.body.quantity);
+    console.log(quantity)
     if (cid && pid) {
         let addProduct = await cmanager.addProduct(cid, pid, quantity)
         return res.json({
             success: true,
             status: 200,
+            pid,
             quantity
         })
     }

@@ -26,7 +26,7 @@
           </li>
           <li class="nav-item">
             <a href="/cart"><img  class="carrito" src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
-            <span class="numero text-white">{{length.length}}</span>
+            <span  id="carrito" class="numero text-white"></span>
           </li>
         </ul>
       </div>
@@ -34,17 +34,7 @@
   </nav>
   </header>
 
-<div class="row body">
-{{#each products}}
-    <div class="card col-md-4 my-5 mb-5 mx-5" style="width: 18rem;">
-  <img src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{this.title}}</h5>
-    <p class="card-text">{{this.description}}</p>
-    <a href="/products/{{this.id}}" class="btn"  style="background-color: #83b674; color: white;">Ver más información</a>
-  </div>
-</div>
-{{/each}}
+<div id="products" class="row body d-flex justify-content-center">
 
 </div>
 

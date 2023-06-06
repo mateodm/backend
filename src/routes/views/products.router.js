@@ -11,33 +11,22 @@ const router = Router()
 
 /* PRODUCTS */
 router.get("/", async (req, res) => {
-    let cart = await cmanager.getCartByID(1)
-    let products = await manager.getProducts()
-    let length = cart.products
-    let quantityToSlice = req.query.limit ?? products.length
-    let productsSlice = products.slice(0, quantityToSlice)
-    if(quantityToSlice) {
+    let load = true
         return res.render("products", {
-            products: productsSlice,
-            length: length,
+            load
         })
-    }
         return res.send({
             success: true,
             status: 404,
-            products
         })
     })
 
 router.get("/:pid", async(req, res) => {
-    let cart = await cmanager.getCartByID(1)
-    let length = cart.products
     let id = Number(req.params.pid)
     let product = await manager.getProductByID(id)
     if(product) {
         return res.render("product",{
-            product: product,
-            length: length,
+            success: true,
         })
     }
     else {

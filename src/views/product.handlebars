@@ -26,7 +26,7 @@
           </li>
           <li class="nav-item">
             <a href="/cart"><img  class="carrito" src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
-            <span class="numero text-white">{{length.length}}</span>
+            <span  id="carrito" class="numero text-white"></span>
           </li>
         </ul>
       </div>
@@ -34,46 +34,15 @@
   </nav>
   </header>
 
-<div class="row d-flex justify-content-center body">
-    <div class="card col-md-12 my-5 mb-5 mx-5" style="width: 18rem;">
-  <img src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{product.title}}</h5>
-    <p class="card-text">{{product.description}}     </p>
-    <p class="card-text"><b>{{product.price}}$</b></p>
-    <p class="card-text">Stock: {{product.stock}} </p>
-    <form id="product-form" action="../api/carts/1/products/{{product.id}}" method="POST">
-    <input id="quantity" name="quantity" class="my-3" type="number" value="1" />
-    <button type="submit" class="btn"  style="background-color: #83b674; color: white;" >Agregar al carrito</a>
-    </form>
+<div id="detail" class="row d-flex justify-content-center body">
 
-  </div>
 </div>
 </div>
 
 
 <script>
-document.getElementById("product-form").addEventListener("submit", function(event) {
-    event.preventDefault(); 
-    let quantity = document.getElementById("quantity").value;
-    let data = {
-        quantity: quantity
-    };
-    fetch("../api/cart/1/products/{{product.id}}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error("Error al enviar la solicitud:", error);
-    });
-});
+
+
 </script>
 <style type="text/css">
    .carrito {

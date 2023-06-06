@@ -21,7 +21,7 @@ server.set("views", __dirname + "/views");
 server.use(express.json());
 server.use("/", router);
 /* ACCEDER ARCHIVOS EN PUBLIC (ERROR ANTERIOR) */
-server.use("/public", express.static("public"))
+server.use(express.static(`${__dirname}/public`));
 server.use(express.urlencoded({extended:true}));
 
 server.use(logger("dev"));

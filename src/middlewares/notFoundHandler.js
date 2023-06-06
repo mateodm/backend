@@ -5,5 +5,4 @@ export default function notFoundHandler (req, res, next) {
         path: req.url,
         response:"Not found"
     })
-
 }
