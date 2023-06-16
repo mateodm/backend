@@ -1,12 +1,10 @@
 import { Router } from "express";
-import ProductManager from "../../ProductManager.js"
-import CartManager from "../../CartManager.js";
+import ProductManager from "../../managers/product.js"
 import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
 
 const router = Router()
 let manager = new ProductManager("./src/json/products.json");
-let cmanager = new CartManager("./src/json/carts.json")
 
 /* AÑADIR PRODUCTO */
 router.post("/post", async (req, res) => {

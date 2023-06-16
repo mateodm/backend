@@ -34,8 +34,7 @@
   </nav>
   </header>
 
-<section class="row d-grid justify-content-center align-items-center my-5">
-<form action="/api/products/post" method="POST">
+<form class="my-5" action="/api/products/post" method="POST" onsubmit="submitForm(event)">
   <label for="title">Title:</label>
   <input type="text" id="title" name="title" required>
 
@@ -56,8 +55,48 @@
 
   <button type="submit">Submit</button>
 </form>
-</section>
 
+<script>
+  function submitForm(event) {
+    event.preventDefault(); 
+
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const price = document.getElementById('price').value;
+    const thumbnail = document.getElementById('thumbnail').value;
+    const code = document.getElementById('code').value;
+    const stock = document.getElementById('stock').value;
+
+    const formData = {
+      title: title,
+      description: description,
+      price: price,
+      thumbnail: thumbnail,
+      code: code,
+      stock: stock
+    };
+
+    // Enviar los datos en formato JSON al servidor
+    fetch('/api/products/post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Datos enviados correctamente');
+          window.location.href = '/products'
+        } else {
+          console.error('Error al enviar los datos');
+        }
+      })
+      .catch(error => {
+        console.error('Error de red:', error);
+      });
+  }
+</script>
 
   <div class="text-center text-white p-3"  style="background-color: #83b674;">
     © 2020 Copyright:

@@ -1,5 +1,7 @@
 /* const fs = require('fs') */
 import fs from "fs"
+
+
 export default class ProductManager {
     #path;
     constructor(path) {

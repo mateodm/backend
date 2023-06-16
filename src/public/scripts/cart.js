@@ -11,9 +11,9 @@ socket.on("cartLength", (data) => {
 
 socket.on("card-cart", (data) => {
   let location = document.getElementById("cart")
-  console.log
   location.innerHTML = ""
   data.forEach((product) => {
+  productID = product._id.toString()
     let tr = document.createElement("tr")
     tr.innerHTML = `     
       <th scope="row" class="border-bottom-0">
@@ -38,18 +38,18 @@ socket.on("card-cart", (data) => {
       <p class="mb-0" style="font-weight: 500;">${product.price}</p>
     </td>
     <td class="align-middle border-bottom-0">
-    <button class="deleteButton" type="submit" data-product-id="${product.id}" onclick="getPID(${product.id})"><img class="tachito" src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000"></button>
+    <button class="deleteButton" type="submit" data-product-id="${productID.toString()}" onclick="getPID('${productID.toString()}')""><img class="tachito" src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000"></button>
     </td> `
     location.appendChild(tr)
   })
 
 })
 
-let pid = 1;
+
 
 async function getPID(id) {
   pid = id;
-      await fetch(`/api/cart/1/products/${pid}`, {
+      await fetch(`/api/cart/648a4845503272604ff415cd/products/${pid}`, {
         method: 'DELETE',
       })
       socket.emit("card")

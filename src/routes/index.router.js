@@ -1,6 +1,6 @@
 import {Router} from "express"
 import api_router from "./api/api.router.js"
-import views_router from "./views/index.router.js"
+import views_router from "./views/indexmongo.router.js"
 const router = Router()
 
 router.use("/api", api_router)

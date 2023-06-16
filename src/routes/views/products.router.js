@@ -1,7 +1,8 @@
 import { Router } from "express"
-import ProductManager from "../../ProductManager.js"
+import ProductManager from "../../managers/product.js"
 import Index from "../index.router.js"
-import CartManager from "../../CartManager.js";
+import Products from "../../models/product.model.js";
+import CartManager from "../../managers/cart.js";
 
 
 let manager = new ProductManager("./src/json/products.json");
@@ -22,20 +23,12 @@ router.get("/", async (req, res) => {
     })
 
 router.get("/:pid", async(req, res) => {
-    let id = Number(req.params.pid)
-    let product = await manager.getProductByID(id)
-    if(product) {
+/*     let id = req.params.pid
+    console.log(id)
+    let product = await Products.findById(id) */
         return res.render("product",{
             success: true,
         })
-    }
-    else {
-        return res.send({
-            success: false,
-            status: 404,
-
-        })
-    }
 })
 
 

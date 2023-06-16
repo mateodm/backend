@@ -1,6 +1,10 @@
 import { Router } from "express"
-import ProductManager from "../../ProductManager.js"
-import CartManager from "../../CartManager.js";
+import ProductManager from "../../managers/product.js"
+import CartManager from "../../managers/cart.js";
+import Product from "../../models/product.model.js";
+import Cart from "../../models/cart.model.js";
+
+
 let manager = new ProductManager("./src/json/products.json");
 let cmanager = new CartManager("./src/json/carts.json")
 const router = Router()

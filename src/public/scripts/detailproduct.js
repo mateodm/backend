@@ -1,11 +1,11 @@
 
 
 async function eventSubmit(id) {
-    let idNumber = Number(id)
+    let idNumber = id
     let quantity = document.getElementById("quantity").value
     let data = {quantity}
-    await fetch(`/api/cart/1/products/${idNumber}`, {
-        method: "POST",
+    await fetch(`/api/cart/648a4845503272604ff415cd/products/${idNumber}`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
@@ -45,7 +45,7 @@ socket.on("load_products", async data => {
         <div class="card-body">
             <h5 class="card-title">${product.title}</h5>
             <p class="card-text">${product.description}</p>
-            <a href="/products/${product.id}" class="btn"style="background-color: #83b674; color: white;">Ver más información</a>
+            <a href="/products/${product._id}" class="btn"style="background-color: #83b674; color: white;">Ver más información</a>
         </div>
         `
         location.appendChild(card)
@@ -72,7 +72,7 @@ socket.on("detail-product", data => {
         <p class="card-text"><b>${data.price}$</b></p>
         <p id="stock" class="card-text">Stock: ${data.stock} </p>
         <input id="quantity" name="quantity" class="my-3" type="number" value="1" />
-        <button id="boton" class="btn" onClick="eventSubmit(${data.id})" style="background-color: #83b674; color: white;" >Agregar al carrito</button>
+        <button id="boton" class="btn"  onclick="eventSubmit('${data._id.toString()}')" style="background-color: #83b674; color: white;" >Agregar al carrito</button>
     </div>
     `
 })
