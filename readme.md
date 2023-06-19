@@ -1,5 +1,3 @@
-<h1> POSTMAN GESTOR</h1>
-<img src="./src/img/success.png">
 
 
 <h1><b>CAMBIOS REALIZADOS EN EL ULTIMO COMMIT:</b></h1>
