@@ -22,7 +22,7 @@ socket_server.on("connection", (socket) => {
     socket.on("length", async function()  {
 /*      let cmanager = new CartManager("./src/json/carts.json")
         let cart = await cmanager.getCartByID(1) */
-        let cart = await Cart.findById("648a4845503272604ff415cd")
+        let cart = await Cart.findById("6490cf8ae17a7f96df15d3f4")
         let info = cart.products
         socket_server.emit("cartLength", info.length)
 
@@ -46,26 +46,15 @@ socket_server.on("connection", (socket) => {
 /*      let cmanager = new CartManager("./src/json/carts.json")
         let manager = new ProductManager("./src/json/products.json")
         let cart = await cmanager.getCartByID(1) */
-        let cart = await Cart.findById("648a4845503272604ff415cd")
-        let products = cart.products
-        let productsCart = []
-        for (const product of products) {
             try {
-                const productID = await Products.findById(product.pid);
-                if (!productID) {
-                    continue;
-                }
-                const quantity = product.quantity;
-                const productFinal = {
-                    ...productID.toObject(),
-                    quantity: quantity
-                };
-                productsCart.push(productFinal);
+                const cart = await Cart.findById("6490cf8ae17a7f96df15d3f4").populate({
+                    path: "products", populate: { path: "product", model: "products"}
+                })
+                let products = cart.products
+                socket.emit("card-cart", products)
             } catch (error) {
                 console.error(error);
             }
-        }
-        socket.emit("card-cart", productsCart)
     })
     socket.on("product-find", async (data) => {
         try {

@@ -12,13 +12,13 @@ const router = Router()
 
 /* INDEX */
 router.get("/", async (req, res) => {
-    let cart = await Cart.findById("648a4845503272604ff415cd")
+    let cart = await Cart.findById("6490cf8ae17a7f96df15d3f4")
     let length = cart.products.length
     return res.render("index",{ length: length})
 })
 /* CREAR PRODUCTO */
-/* router.get("/new_product", async (req, res) => {
-    let cart = await cmanager.getCartByID(1)
+ router.get("/new_product", async (req, res) => {
+    let cart = await Cart.findById("6490cf8ae17a7f96df15d3f4")
     let length = cart.products
     return res.render("newproduct",{ length: length})
 })
@@ -31,7 +31,6 @@ router.get("/chat", async (req, res, next) => {
         next(error);
       }
     });
-     */
 
 router.use("/products", productsRouter)
 router.use("/cart", cartsRouter)

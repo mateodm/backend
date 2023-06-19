@@ -4,7 +4,7 @@ async function eventSubmit(id) {
     let idNumber = id
     let quantity = document.getElementById("quantity").value
     let data = {quantity}
-    await fetch(`/api/cart/648a4845503272604ff415cd/products/${idNumber}`, {
+    await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${idNumber}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

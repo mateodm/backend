@@ -1,8 +1,15 @@
-import { model, Schema} from "mongoose"
+import { model, Schema, Types} from "mongoose"
 
 let collection = "cart"
 let schema = new Schema({
-    products: { type: Array, required: true}
+    products: [{
+        product: {
+        type: Types.ObjectId, required: true, ref: "product"
+        },
+        quantity: { type: Number, required: true
+        },
+        type: Object,
+    }]
 })
 
 let Cart = model(collection, schema)

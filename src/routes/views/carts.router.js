@@ -11,7 +11,7 @@ const router = Router()
 
 
 router.get("/", async (req, res) => {
-    let cart = await cmanager.getCartByID(1)
+/*     let cart = await cmanager.getCartByID(1)
     let products = cart.products
     let productsCart = []
     for (const product of products) {
@@ -19,8 +19,8 @@ router.get("/", async (req, res) => {
         let quantity = product.quantity
         let productFinal = {...productID, quantity: quantity};
         productsCart.push(productFinal)
-    }
-    return res.render("cart", { products: productsCart,})
+    } */
+    return res.render("cart", { })
 })
 
 

@@ -12,7 +12,9 @@ socket.on("cartLength", (data) => {
 socket.on("card-cart", (data) => {
   let location = document.getElementById("cart")
   location.innerHTML = ""
-  data.forEach((product) => {
+  data.forEach((data) => {
+  let product = data.product
+  let quantity = data.quantity
   productID = product._id.toString()
     let tr = document.createElement("tr")
     tr.innerHTML = `     
@@ -30,7 +32,7 @@ socket.on("card-cart", (data) => {
     </td>
     <td class="align-middle border-bottom-0">
       <div class="d-flex flex-row">
-      ${product.quantity}
+      ${quantity}
         </button>
       </div>
     </td>
@@ -38,7 +40,7 @@ socket.on("card-cart", (data) => {
       <p class="mb-0" style="font-weight: 500;">${product.price}</p>
     </td>
     <td class="align-middle border-bottom-0">
-    <button class="deleteButton" type="submit" data-product-id="${productID.toString()}" onclick="getPID('${productID.toString()}')""><img class="tachito" src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000"></button>
+    <button class="deleteButton" type="submit" data-product-id="${product._id.toString()}" onclick="getPID('${product._id.toString()}')""><img class="tachito" src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000"></button>
     </td> `
     location.appendChild(tr)
   })
@@ -49,7 +51,7 @@ socket.on("card-cart", (data) => {
 
 async function getPID(id) {
   pid = id;
-      await fetch(`/api/cart/648a4845503272604ff415cd/products/${pid}`, {
+      await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}`, {
         method: 'DELETE',
       })
       socket.emit("card")
