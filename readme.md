@@ -5,7 +5,7 @@
 <h2> IMPLEMENTACION MONGODB Y MONGOOSE</h2>
 <h2> POPULATES & INDEX</h2>
 <ul>
-Rutas views
+<h3><b>Rutas views</b></h3>
 <li>localhost:8080/products - <b>obtienes lista de productos</b></li>
 <li>localhost:8080/products/:pid - <b>obtiene detalles del producto indicado </b></li>
 <li>localhost:8080/chat - <b>ingresas al chat</b></li>
@@ -13,7 +13,7 @@ Rutas views
 <li>localhost:8080/new_product - <b>formulario de creación de producto</b></li>
 </ul>
 <ul>
-Rutas api
+<h3><b>Rutas api</b></h3>
 <li>METHOD GET: localhost:8080/api/cart - <b>obtiene todos los carritos</b></li>
 <li>METHOD POST: localhost:8080/api/cart - <b>Crea un carrito</b></li>
 <li>METHOD GET: localhost:8080/api/cart/:cid - <b>obtiene los datos del carrito indicado</b></li>
