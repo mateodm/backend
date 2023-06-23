@@ -27,6 +27,19 @@ socket_server.on("connection", (socket) => {
         socket_server.emit("cartLength", info.length)
 
     })
+    socket.on("totalamount", async data => {
+        let cid = "6490cf8ae17a7f96df15d3f4"
+        let amount = 0
+        let cartID = await Cart.findById(cid).populate({
+            path: "products", populate: { path: "product", model: "products"}
+        })
+        let cartProducts = cartID.products
+        cartProducts.forEach(product => {
+            let price = Number(product.product.price) * product.quantity
+            amount = amount + price
+        }) 
+        socket.emit("amount", amount)
+    })
     socket.on("new_stock", async data => { 
 /*     let manager = new ProductManager("./src/json/products.json")
     let product = await manager.getProductByID(data) */
@@ -48,8 +61,10 @@ socket_server.on("connection", (socket) => {
         let cart = await cmanager.getCartByID(1) */
             try {
                 const cart = await Cart.findById("6490cf8ae17a7f96df15d3f4").populate({
-                    path: "products", populate: { path: "product", model: "products"}
+                    path: "products",
+                    populate: { path: "product", model: "products", options: { sort: { title: 1 } } }
                 })
+                console.log(cart)
                 let products = cart.products
                 socket.emit("card-cart", products)
             } catch (error) {

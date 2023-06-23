@@ -20,7 +20,6 @@ router.get("/", async (req, res) => {
     const count = await Products.countDocuments({ title: titleRegex });
     const totalPages = Math.ceil(count / pageSize);
     const totalPagesArray = Array.from({ length: totalPages }, (_, index) => index + 1);
-    console.log(totalPagesArray)
     const products = await Products.find({ title: titleRegex })
       .skip(skip)
       .limit(pageSize)

@@ -1,16 +1,9 @@
 <header>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #83b674;">
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #83b674;">
     <div class="container-fluid">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarExample01"
-        aria-controls="navbarExample01"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarExample01">
@@ -28,7 +21,7 @@
       </div>
     </div>
   </nav>
-  </header>
+</header>
 <section class="h-100 h-custom">
   <div class="container h-100 py-5">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -50,32 +43,35 @@
             </tbody>
           </table>
         </div>
+        <div id="amount" class="mb-4">
+        </div>
 </section>
 
-  <div class="text-center text-white p-3"  style="background-color: #83b674;">
-    © 2020 Copyright:
-    <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-  </div>
-  <!-- Copyright -->
+<div class="text-center text-white p-3" style="background-color: #83b674;">
+  © 2020 Copyright:
+  <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+</div>
+<!-- Copyright -->
 </footer>
 
 <style>
   .tachito {
     width: 40px;
   }
+
   .deleteButton {
     background-color: none;
     padding: 0px;
   }
 </style>
 <script>
-let pid = 1
-function getPID(id) {
-  pid = id
-}
+  let pid = 1
+  function getPID(id) {
+    pid = id
+  }
   const deleteButtons = document.getElementsByClassName('deleteButton');
   for (let i = 0; i < deleteButtons.length; i++) {
-    deleteButtons[i].addEventListener('click', async function(event) {
+    deleteButtons[i].addEventListener('click', async function (event) {
       event.preventDefault(); // Evita el envío del formulario
 
       try {

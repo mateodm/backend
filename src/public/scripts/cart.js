@@ -1,10 +1,9 @@
 
-
 document.addEventListener("DOMContentLoaded", function () {
   socket.emit("length")
   socket.emit("card")
+  socket.emit("totalamount")
 });
-
 socket.on("cartLength", (data) => {
   document.getElementById("carrito").innerHTML = data;
 });
@@ -17,6 +16,7 @@ socket.on("card-cart", (data) => {
   let quantity = data.quantity
   productID = product._id.toString()
     let tr = document.createElement("tr")
+    tr.classList.add("totalAmount")
     tr.innerHTML = `     
       <th scope="row" class="border-bottom-0">
         <div class="d-flex align-items-center">
@@ -47,7 +47,20 @@ socket.on("card-cart", (data) => {
 
 })
 
+socket.on("amount", (data) => {
+  console.log(document.getElementsByClassName("totalAmount"))
+  document.getElementById("amount").innerHTML = `     
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col" class="h4">El precio total a pagar es de: ${data}</th>
+    </tr>
+  </thead>
+  <tbody id="cart">
 
+  </tbody>
+</table> `
+}) 
 
 async function getPID(id) {
   pid = id;

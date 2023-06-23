@@ -24,7 +24,8 @@ router.get("/:cid", async (req, res, next) => {
     try {
         let id = req.params.cid
         let cartFind = await Cart.findById(id).populate({
-            path: "products", populate: { path: "product", model: "products"}
+            path: "products", populate: { path: "product", model: "products"},
+            options: { sort: { "product.title": 1 } }
         })
         if (cartFind) {
             return res.json({status: 200, cart: cartFind})
@@ -55,7 +56,8 @@ router.put("/:cid/products/:pid", async (req, res, next) => {
     let data = {pid, quantity}
     let cart = await Cart.findById(cid)
     let cartProducts = cart.products
-    let check = cartProducts.find(cart => cart.pid === pid)
+    let check = cartProducts.find(cart => cart.product === pid)
+    console.log(check)
     if (!check) {
         let update = await Cart.findByIdAndUpdate(cid,  {
             $push: {
@@ -104,6 +106,21 @@ router.delete("/:cid/products/:pid", async (req, res, next) => {
         next(error)
     }
 })
-
+router.get("/bills/:cid", async (req, res) => {
+    let cid = req.params.cid
+    let amount = 0
+    let cartID = await Cart.findById(cid).populate({
+        path: "products", populate: { path: "product", model: "products"}
+    })
+    let cartProducts = cartID.products
+    cartProducts.forEach(product => {
+        let price = Number(product.product.price) * product.quantity
+        amount = amount + price
+    }) 
+    return res.json({
+        status: 200,
+        total: amount,
+    })
+})
 
 export default router
