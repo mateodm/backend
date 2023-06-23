@@ -33,15 +33,15 @@ socket_server.on("connection", (socket) => {
     let product = await Products.findById(data)
     socket.emit("change_stock", product)
     })
-    socket.on("products", async function() {
-/*      let manager = new ProductManager("./src/json/products.json")
-        let products = await manager.getProducts() */
+/*     socket.on("products", async function() {
+        let manager = new ProductManager("./src/json/products.json")
+        let products = await manager.getProducts() 
         let products = await Products.find().exec()
         let productsSend = products.filter(product => product.stock !== 0)
             if(productsSend) {
                 socket_server.emit("load_products", productsSend)
             }
-    })
+    }) */
     socket.on("card", async function() {
 /*      let cmanager = new CartManager("./src/json/carts.json")
         let manager = new ProductManager("./src/json/products.json")

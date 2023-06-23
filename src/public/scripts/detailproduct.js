@@ -1,5 +1,3 @@
-
-
 async function eventSubmit(id) {
     let idNumber = id
     let quantity = document.getElementById("quantity").value
@@ -33,7 +31,7 @@ socket.on("change_stock", product => {
     location.innerHTML = product.stock
 }) 
 
-socket.on("load_products", async data => {
+/* socket.on("load_products", async data => {
     let location = document.getElementById("products")
     location.innerHTML = ""
     data.map((product) => {
@@ -50,7 +48,7 @@ socket.on("load_products", async data => {
         `
         location.appendChild(card)
     })
-})
+}) */
 
 document.addEventListener("DOMContentLoaded", function (e) {
     active()
