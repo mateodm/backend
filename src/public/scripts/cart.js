@@ -12,9 +12,9 @@ socket.on("card-cart", (data) => {
   let location = document.getElementById("cart")
   location.innerHTML = ""
   data.forEach((data) => {
-  let product = data.product
-  let quantity = data.quantity
-  productID = product._id.toString()
+    let product = data.product
+    let quantity = data.quantity
+    productID = product._id.toString()
     let tr = document.createElement("tr")
     tr.classList.add("totalAmount")
     tr.innerHTML = `     
@@ -30,11 +30,11 @@ socket.on("card-cart", (data) => {
     <td class="align-middle border-bottom-0">
       <p class="mb-0" style="font-weight: 500;">${product.description}</p>
     </td>
-    <td class="align-middle border-bottom-0">
-      <div class="d-flex flex-row">
-      ${quantity}
-        </button>
-      </div>
+    <td class="align-middle justify-content-center border-bottom-0">
+      <button class="quantity" type="submit" onclick="subtractUnit('${product._id.toString()}', ${quantity})")>-</button>
+        ${quantity}
+      <button class="quantity" type="submit" onclick="addUnit('${product._id.toString()}', ${quantity})")>+</button>
+
     </td>
     <td class="align-middle border-bottom-0">
       <p class="mb-0" style="font-weight: 500;">${product.price}</p>
@@ -60,12 +60,37 @@ socket.on("amount", (data) => {
 
   </tbody>
 </table> `
-}) 
-
+})
+async function subtractUnit(id, quantity) {
+  let pid = id
+  if (quantity > 1) {
+    let newQuantity = quantity - 1
+    await fetch(`api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}/${newQuantity}/subtract`, {
+      method: "PUT",
+    })
+  }
+  else {
+    alert("Ya tienes el minimo de unidades")
+  }
+    socket.emit("card")
+    socket.emit("totalamount")
+}
+async function addUnit(id, quantity) {
+  let pid = id
+  let newQuantity = quantity + 1
+  if(pid && newQuantity) {
+    await fetch(`api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}/${newQuantity}/add`, {
+      method: "PUT",
+    })
+  }
+    socket.emit("card")
+    socket.emit("totalamount")
+}
 async function getPID(id) {
   pid = id;
-      await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}`, {
-        method: 'DELETE',
-      })
-      socket.emit("card")
+  await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}`, {
+    method: 'DELETE',
+  })
+  socket.emit("card")
+  socket.emit("totalamount")
 };

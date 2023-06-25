@@ -64,7 +64,6 @@ socket_server.on("connection", (socket) => {
                     path: "products",
                     populate: { path: "product", model: "products", options: { sort: { title: 1 } } }
                 })
-                console.log(cart)
                 let products = cart.products
                 socket.emit("card-cart", products)
             } catch (error) {
