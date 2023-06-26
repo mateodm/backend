@@ -13,8 +13,8 @@ Swal.fire({
 });
 
 socket.on("allMessages", (data) => {
-    document.getElementById("message").innerHTML = data.map((message) => `<br><span><b>${message.userName}</b><span>: ${message.message} </br>` ).join("")
-    ;
+    document.getElementById("message").innerHTML = data.map((message) => `<br><span><b>${message.userName}</b><span>: ${message.message} </br>`).join("")
+        ;
 });
 
 let chatBox = document.getElementById("chatbox");

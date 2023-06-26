@@ -1,7 +1,20 @@
+
+function listener() {
+    let url = window.location.href
+    const regex = /\/products\/[^/]+/
+    let newUrl = url.replace(regex, "/products");
+    if (newUrl === "http://localhost:8080/products") {
+        socket.emit("products")
+        socket.emit("length")
+    }
+}
+listener()
+
+
 async function eventSubmit(id) {
     let idNumber = id
     let quantity = document.getElementById("quantity").value
-    let data = {quantity}
+    let data = { quantity }
     await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${idNumber}`, {
         method: "PUT",
         headers: {
@@ -9,27 +22,23 @@ async function eventSubmit(id) {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error("Error al enviar la solicitud:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("Error al enviar la solicitud:", error);
+        });
     socket.emit("new_stock", id)
     socket.emit("length")
     active()
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    socket.emit("products")
-  });
-
 
 socket.on("change_stock", product => {
     location.innerHTML = ""
     location.innerHTML = product.stock
-}) 
+})
 
 /* socket.on("load_products", async data => {
     let location = document.getElementById("products")
@@ -61,7 +70,7 @@ function active() {
 
 socket.on("detail-product", data => {
     let location = document.getElementById("detail")
-    location.innerHTML =  ` 
+    location.innerHTML = ` 
     <div class="card col-md-12 my-5 mb-5 mx-5" style="width: 18rem;">
         <img src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg" class="card-img-top" alt="...">
         <div class="card-body">

@@ -1,9 +1,15 @@
 
-document.addEventListener("DOMContentLoaded", function () {
-  socket.emit("length")
-  socket.emit("card")
-  socket.emit("totalamount")
-});
+function listener() {
+  let url = window.location.href
+  if (url !== "http://localhost:8080/cart") {
+    socket.emit("length")
+  }
+  else if (url === "http://localhost:8080/cart") {
+    socket.emit("card")
+    socket.emit("totalamount")
+  }
+}
+listener()
 socket.on("cartLength", (data) => {
   document.getElementById("carrito").innerHTML = data;
 });
@@ -72,19 +78,19 @@ async function subtractUnit(id, quantity) {
   else {
     alert("Ya tienes el minimo de unidades")
   }
-    socket.emit("card")
-    socket.emit("totalamount")
+  socket.emit("card")
+  socket.emit("totalamount")
 }
 async function addUnit(id, quantity) {
   let pid = id
   let newQuantity = quantity + 1
-  if(pid && newQuantity) {
+  if (pid && newQuantity) {
     await fetch(`api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}/${newQuantity}/add`, {
       method: "PUT",
     })
   }
-    socket.emit("card")
-    socket.emit("totalamount")
+  socket.emit("card")
+  socket.emit("totalamount")
 }
 async function getPID(id) {
   pid = id;
