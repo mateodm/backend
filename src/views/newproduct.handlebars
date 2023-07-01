@@ -2,15 +2,8 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #83b674;">
     <div class="container-fluid">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-mdb-toggle="collapse"
-        data-mdb-target="#navbarExample01"
-        aria-controls="navbarExample01"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarExample01">
@@ -25,14 +18,15 @@
             <a class="nav-link text-white" href="/chat">Chat</a>
           </li>
           <li class="nav-item">
-            <a href="/cart"><img  class="carrito" src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
-            <span  id="carrito" class="numero text-white"></span>
+            <a href="/cart"><img class="carrito"
+                src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
+            <span id="carrito" class="numero text-white"></span>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  </header>
+</header>
 
 <form class="my-5" action="/api/products/post" method="POST" onsubmit="submitForm(event)">
   <label for="title">Title:</label>
@@ -58,7 +52,7 @@
 
 <script>
   function submitForm(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
@@ -98,19 +92,26 @@
   }
 </script>
 
-  <div class="text-center text-white p-3"  style="background-color: #83b674;">
-    © 2020 Copyright:
-    <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-  </div>
+<div class="text-center text-white p-3" style="background-color: #83b674;">
+  © 2020 Copyright:
+  <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+</div>
 
-  <style type="text/css">
-   .carrito {
+<style type="text/css">
+  .carrito {
     height: 3.4vh;
-   }
-    .numero { 
+  }
+
+  .numero {
     background-color: black;
     border-radius: 100%;
     padding: 6px;
     font-size: 14px;
-   }
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 </style>

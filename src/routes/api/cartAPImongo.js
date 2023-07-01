@@ -69,11 +69,11 @@ router.put("/:cid/products/:pid", async (req, res, next) => {
             let newQuantity = getStock.stock - quantity;
             await Products.findByIdAndUpdate(pid, { stock: newQuantity })
             if (cid, pid) {
-                return res.json({ status: 200, update: update })
+                return res.json({ success: true, status: 200, update: update })
             }
         }
         else {
-            return res.json({ status: 400, error: "El producto ya existe" })
+            return res.json({ success: false, status: 400, error: "El producto ya existe" })
         }
     }
     catch (error) {
@@ -140,8 +140,6 @@ router.delete("/:cid/products/:pid", async (req, res, next) => {
         const quantity = productID.products.find((product) => product.product === pid)
         let product = await Products.findById(pid)
         let newQuantity = Number(product.stock) + Number(quantity.quantity)
-        console.log(quantity)
-        console.log(newQuantity)
         if (cid, pid) {
             await Products.findByIdAndUpdate(pid, { stock: newQuantity })
             const updatedCart = await Cart.findOneAndUpdate(
@@ -150,7 +148,7 @@ router.delete("/:cid/products/:pid", async (req, res, next) => {
                 { new: true }
             ).populate("products.product", "title description stock thumbnail price code");
             return res.json({
-                status: 200, updatedCart
+                success: true, status: 200, updatedCart
             })
         }
     }

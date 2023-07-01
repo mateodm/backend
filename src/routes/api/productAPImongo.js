@@ -2,10 +2,11 @@ import { Router } from "express";
 import Products from "../../models/product.model.js";
 import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
+import auth from "../../middlewares/devsAuth.js"
 
 const router = Router()
 /* AÑADIR PRODUCTO */
-router.post("/post", async (req, res) => {
+router.post("/post", auth, async (req, res) => {
     try {
         let title = req.body.title 
         let description = req.body.description 

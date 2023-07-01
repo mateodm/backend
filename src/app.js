@@ -11,10 +11,24 @@ import { __dirname, __filename } from "./utils.js"
 import errorHandler from "./middlewares/errorHandler.js";
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import cookieParser from "cookie-parser";
+import expressSession from "express-session"
+import sessionFileStore from "session-file-store"
+import mongoStore from "connect-mongo"
 
 /* SERVER CONFIG */
 const server = express()
+
 server.use(cookieParser(process.env.COOKIE_NAME))
+server.use(expressSession({
+    store: mongoStore.create({
+        mongoUrl: process.env.URL,ttl:10000
+         }),
+    secret: process.env.SECRET_SESSION,
+    resave: true,
+    saveUninitialized: true
+}))
+
+
 /* HANDLERBARS */
 server.engine("handlebars", engine());
 server.set("view engine", "handlebars");
@@ -32,6 +46,7 @@ server.use(logger("dev"));
 
 server.use(errorHandler);
 server.use(notFoundHandler)
+
 
 connect("mongodb+srv://ecommercemongoose:test@cluster0.a5r87to.mongodb.net/ecommerce")
     .then(() => console.log("mongoose connected"))

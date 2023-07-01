@@ -22,6 +22,9 @@ router.get("/new_product", async (req, res) => {
     let length = cart.products
     return res.render("newproduct",{ length: length})
 })
+router.get("/register", (req, res) => {
+  return res.render("userRegister")
+})
 router.get("/chat", async (req, res, next) => {
     try {
         return res.render("chat", {

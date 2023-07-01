@@ -5,6 +5,7 @@ import productsRouter from "./products.router.js"
 import cartsRouter from "./carts.router.js"
 import Products from "../../models/product.model.js";
 import Cart from "../../models/cart.model.js";
+import auth  from "../../middlewares/devsAuth.js";
 
 
 
@@ -16,8 +17,15 @@ router.get("/", async (req, res) => {
     let length = cart.products.length
     return res.render("index",{ length: length})
 })
+/* REGISTER */
+router.get("/register", (req, res) => {
+  return res.render("userRegister")
+})
+router.get("/signin", (req, res) => {
+  return res.render("login")
+})
 /* CREAR PRODUCTO */
- router.get("/new_product", async (req, res) => {
+ router.get("/new_product", auth, async (req, res) => {
     let cart = await Cart.findById("6490cf8ae17a7f96df15d3f4")
     let length = cart.products
     return res.render("newproduct",{ length: length})

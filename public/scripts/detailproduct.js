@@ -24,7 +24,26 @@ async function eventSubmit(id) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            if (data.success === true) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Product added succesfully',
+                    width:"300px",
+                    heigth:"20px",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+            else if(data.success === false) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    width:"300px",
+                    heigth:"20px",
+                    text: 'Product already in the cart',
+                  })
+            }
         })
         .catch(error => {
             console.error("Error al enviar la solicitud:", error);

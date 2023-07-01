@@ -34,17 +34,42 @@
   </nav>
 </header>
 
-<div class="body"></div>
+<section class="d-flex justify-content-center">
+  <form class="my-5" onsubmit="submitRegister(event)">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input class="form-control" id="name" maxlength="30" name="name" aria-describedby="emailHelp"
+        placeholder="Enter username">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control" id="mail" name="mail" aria-describedby="emailHelp"
+        placeholder="Enter email">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Age</label>
+      <input class="form-control" id="age" name="age" minlength="2" maxlength="2" placeholder="Your age">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" id="password" minlength="8" required name="password" placeholder="Password">
+    </div>
+
+    <button type="submit" class="btn my-3" style="background-color: #83b674; color: white;">Register</button>
+  </form>
+</section>
+<div class="text-center text-white p-3" style="background-color: #83b674;">
+  © 2020 Copyright:
+  <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+</div>
 
 <style type="text/css">
-  .body {
-    height: 88vh;
-    background-image: url(https://thumbs.dreamstime.com/z/vector-del-fondo-comercio-electr%C3%B3nico-icono-ejemplo-de-la-tienda-pendiente-el-para-sus-necesidades-un-tan-nuevo-proyecto-p%C3%A1gina-152082526.jpg);
-    background-size: cover;
-  }
-
   .carrito {
     height: 3.4vh;
+  }
+
+  .form-group {
+    width: 40vw;
   }
 
   .numero {
@@ -53,17 +78,4 @@
     padding: 6px;
     font-size: 14px;
   }
-    body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
 </style>
-
-<!-- Copyright -->
-<div class="text-center text-white p-3" style="background-color: #83b674;">
-  © 2020 Copyright:
-  <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-</div>
-<!-- Copyright -->
-</footer>

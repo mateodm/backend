@@ -96,6 +96,19 @@ async function getPID(id) {
   pid = id;
   await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}`, {
     method: 'DELETE',
+  }).then(response => response.json())
+  .then(data => {
+    if (data.success === true) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        width:"300px",
+        heigth:"20px",
+        title: 'Product removed succesfully',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
   })
   socket.emit("card")
   socket.emit("totalamount")

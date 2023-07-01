@@ -18,6 +18,12 @@
             <a class="nav-link text-white" href="/chat">Chat</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link text-white" href="/register">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/signin">Sign-in</a>
+          </li>
+          <li class="nav-item">
             <a href="/cart"><img class="carrito"
                 src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
             <span id="carrito" class="numero text-white"></span>
@@ -31,7 +37,8 @@
   <div class="row">
     <div class="col-md-12 d-grid justify-content-center my-3">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Nombre del producto" aria-label="Nombre del producto" aria-describedby="buscar-btn" id="input-search">
+        <input type="text" class="form-control" placeholder="Nombre del producto" aria-label="Nombre del producto"
+          aria-describedby="buscar-btn" id="input-search">
         <button class="btn btn-primary" type="button" id="buscar-btn">Buscar</button>
       </div>
     </div>
@@ -80,9 +87,16 @@
     font-size: 25px;
     border: solid 1px white;
   }
+
   .btn {
     background-color: #83b674;
     border: solid 0px;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 </style>
 
