@@ -10,7 +10,9 @@
 <li>localhost:8080/products/:pid - <b>obtiene detalles del producto indicado </b></li>
 <li>localhost:8080/chat - <b>ingresas al chat</b></li>
 <li>localhost:8080/cart - <b>ingresas al carrito</b></li>
-<li>localhost:8080/new_product - <b>formulario de creación de producto</b></li>
+<li>localhost:8080/new_product - <b>formulario de creación de producto (solo acceso role 1)</b></li>
+  <li>localhost:8080/signin - <b>formulario de iniciar sesion</b></li>
+  <li>localhost:8080/register - <b>formulario de registro</b></li>
 </ul>
 <ul>
 <h3><b>Rutas api</b></h3>
@@ -24,6 +26,8 @@
 <li>METHOD POST: localhost:8080/api/products/post - <b>aquí es donde se envian los datos del formulario para crear el producto</b></li>
 <li>METHOD PUT: localhost:8080/api/products/:pid - <b>se actualiza un producto desde esta ruta</b></li>
 <li>METHOD DELETE: localhost:8080/api/products/:pid - <b>se elimina el producto indicado</b></li>
+<li>METHOD POST: localhost:8080/api/auth/register - <b>Registrarse (crear usuario)</b></li>
+<li>METHOD POST: localhost:8080/api/auth/login - <b>Iniciar sesion</b></li>
 <img src="./src/img/filter.png">
 <img src="./src/img/trabajopages.png">
 </ul>
