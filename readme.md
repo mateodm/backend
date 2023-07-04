@@ -1,9 +1,9 @@
 
 
 <h1><b>CAMBIOS REALIZADOS EN EL ULTIMO COMMIT:</b></h1>
-<h2> WEBSOCKET ACTIVO</h2>
-<h2> IMPLEMENTACION MONGODB Y MONGOOSE</h2>
-<h2> POPULATES & INDEX</h2>
+<h2> PASSPORT</h2>
+<h2> AUTHENTICATION Y LOG-IN GITHUB</h2>
+<h2> BCRYPT</h2>
 <ul>
 <h3><b>Rutas views</b></h3>
 <li>localhost:8080/products - <b>obtienes lista de productos</b></li>
