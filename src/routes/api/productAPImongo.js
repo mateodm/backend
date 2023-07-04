@@ -3,6 +3,7 @@ import Products from "../../models/product.model.js";
 import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
 import auth from "../../middlewares/devsAuth.js"
+import userAuth from "../../middlewares/userAuth.js";
 
 const router = Router()
 /* AÑADIR PRODUCTO */
@@ -29,7 +30,7 @@ router.post("/post", auth, async (req, res) => {
         }
 )
 
-router.get("/:pid" , async (req, res, next) => {
+router.get("/:pid" , userAuth, async (req, res, next) => {
     try {
     let id = req.params.pid
     console.log(id)
@@ -46,7 +47,7 @@ router.get("/:pid" , async (req, res, next) => {
         next(error)
     }
 })
-router.delete("/:pid", async (req, res, next) => {
+router.delete("/:pid", auth,  async (req, res, next) => {
     try {
         let id = req.params.pid
         await Products.findByIdAndDelete(id)
@@ -63,7 +64,7 @@ router.delete("/:pid", async (req, res, next) => {
     }
 })
 
-router.put("/:pid", async (req, res, next) => {
+router.put("/:pid", auth, async (req, res, next) => {
     try {
         let id = req.params.pid
         let data = req.body

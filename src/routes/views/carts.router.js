@@ -3,6 +3,7 @@ import ProductManager from "../../managers/product.js"
 import CartManager from "../../managers/cart.js";
 import Product from "../../models/product.model.js";
 import Cart from "../../models/cart.model.js";
+import userAuth from "../../middlewares/userAuth.js";
 
 
 let manager = new ProductManager("./src/json/products.json");
@@ -10,7 +11,7 @@ let cmanager = new CartManager("./src/json/carts.json")
 const router = Router()
 
 
-router.get("/", async (req, res) => {
+router.get("/", userAuth, async (req, res) => {
 /*     let cart = await cmanager.getCartByID(1)
     let products = cart.products
     let productsCart = []
@@ -20,7 +21,7 @@ router.get("/", async (req, res) => {
         let productFinal = {...productID, quantity: quantity};
         productsCart.push(productFinal)
     } */
-    return res.render("cart", { })
+    return res.render("cart", {session: req.session })
 })
 
 

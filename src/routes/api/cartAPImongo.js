@@ -5,13 +5,15 @@ import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
 import Products from "../../models/product.model.js";
 import Cart from "../../models/cart.model.js";
+import userAuth from "../../middlewares/userAuth.js";
+import auth from "../../middlewares/devsAuth.js";
 
 
 const router = Router()
 
 /* CARTS */
 
-router.get("/", async (req, res, next) => {
+router.get("/", userAuth, async (req, res, next) => {
     try {
         let Carts = await Cart.find()
         return res.json({ status: 200, carts: Carts })
@@ -20,7 +22,7 @@ router.get("/", async (req, res, next) => {
         next(error)
     }
 })
-router.get("/:cid", async (req, res, next) => {
+router.get("/:cid", userAuth, async (req, res, next) => {
     try {
         let id = req.params.cid
         let cartFind = await Cart.findById(id).populate({
@@ -38,7 +40,7 @@ router.get("/:cid", async (req, res, next) => {
         next(error)
     }
 })
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
     try {
         const cart = await Cart.create({})
         return res.json({ status: 200, cart: cart })
@@ -48,7 +50,7 @@ router.post("/", async (req, res, next) => {
         next(error)
     }
 })
-router.put("/:cid/products/:pid", async (req, res, next) => {
+router.put("/:cid/products/:pid", userAuth, async (req, res, next) => {
     try {
         let cid = req.params.cid;
         let pid = req.params.pid;
@@ -80,7 +82,7 @@ router.put("/:cid/products/:pid", async (req, res, next) => {
         next(error)
     }
 })
-router.put("/:cid/products/:pid/:quantity/add", async (req, res) => {
+router.put("/:cid/products/:pid/:quantity/add", userAuth, async (req, res) => {
     try {
     let cid = req.params.cid
     let pid = req.params.pid
@@ -107,7 +109,7 @@ router.put("/:cid/products/:pid/:quantity/add", async (req, res) => {
         console.log(error)
     }
 })
-router.put("/:cid/products/:pid/:quantity/subtract", async (req, res) => {
+router.put("/:cid/products/:pid/:quantity/subtract", userAuth, async (req, res) => {
     try {
     let cid = req.params.cid
     let pid = req.params.pid
@@ -132,7 +134,7 @@ router.put("/:cid/products/:pid/:quantity/subtract", async (req, res) => {
         console.log(error)
     }
 })
-router.delete("/:cid/products/:pid", async (req, res, next) => {
+router.delete("/:cid/products/:pid", userAuth, async (req, res, next) => {
     try {
         let cid = req.params.cid
         let pid = req.params.pid
@@ -156,7 +158,7 @@ router.delete("/:cid/products/:pid", async (req, res, next) => {
         next(error)
     }
 })
-router.get("/bills/:cid", async (req, res) => {
+router.get("/bills/:cid", userAuth, async (req, res) => {
     let cid = req.params.cid
     let amount = 0
     let cartID = await Cart.findById(cid).populate({

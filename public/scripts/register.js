@@ -33,7 +33,7 @@ function submitRegister(event) {
             showConfirmButton: false,
             timer: 2500
           })
-          window.location.href = '/products'
+          window.location.href = '/signin'
         } 
         else if(data.success === false) {
           Swal.fire({

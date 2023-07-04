@@ -12,6 +12,8 @@ const chat = []
 const ready = () => console.log("server ready on port " + PORT)
 const http_server = server.listen(PORT, ready)
 const socket_server = new Server(http_server)
+
+
 socket_server.on("connection", (socket) => {
     socket.on("auth", () => {
         return null;

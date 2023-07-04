@@ -14,10 +14,11 @@ import cookieParser from "cookie-parser";
 import expressSession from "express-session"
 import sessionFileStore from "session-file-store"
 import mongoStore from "connect-mongo"
+import passport from "passport";
+import inicializePassport from "./config/passport.js"
 
 /* SERVER CONFIG */
 const server = express()
-
 server.use(cookieParser(process.env.COOKIE_NAME))
 server.use(expressSession({
     store: mongoStore.create({
@@ -30,7 +31,14 @@ server.use(expressSession({
 
 
 /* HANDLERBARS */
-server.engine("handlebars", engine());
+server.engine("handlebars", engine({
+    helpers: {
+      ifEquals: function(arg1, arg2, options) {
+        return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+      }
+    }
+  }));
+
 server.set("view engine", "handlebars");
 server.set("views", __dirname + "/views");
 
@@ -46,7 +54,9 @@ server.use(logger("dev"));
 
 server.use(errorHandler);
 server.use(notFoundHandler)
-
+inicializePassport()
+server.use(passport.initialize())
+server.use(passport.session())
 
 connect("mongodb+srv://ecommercemongoose:test@cluster0.a5r87to.mongodb.net/ecommerce")
     .then(() => console.log("mongoose connected"))

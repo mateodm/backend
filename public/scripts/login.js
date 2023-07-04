@@ -8,7 +8,6 @@ function submitLogin(event) {
         mail: mail,
         password: password
     };
-    fetch(`/api/cookies/set/${mail}`).then(res => res.json()).then(res=>alert(res.cookies.user))
     fetch('/api/auth/login', {
       method: 'POST',
       headers: {
@@ -45,3 +44,7 @@ function submitLogin(event) {
         console.error('Error de red:', error);
       });
   }
+
+
+
+  

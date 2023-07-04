@@ -1,38 +1,4 @@
-<header>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #83b674;">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
-        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarExample01">
-        <ul class="navbar-nav me-auto d-flex justify-content-center align-items-center mb-2 mb-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link text-white" aria-current="page" href="#">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/products">Productos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/chat">Chat</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/register">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="/signin">Sign-in</a>
-          </li>
-          <li class="nav-item">
-            <a href="/cart"><img class="carrito"
-                src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
-            <span id="carrito" class="numero text-white"></span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
+
 
 <section class="d-flex justify-content-center">
   <form class="my-5" onsubmit="submitLogin(event)">
@@ -49,10 +15,12 @@
     <button type="submit" class="btn my-3" style="background-color: #83b674; color: white;">Log-in</button>
   </form>
 </section>
-<div class="text-center text-white p-3" style="background-color: #83b674;">
-  © 2020 Copyright:
-  <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-</div>
+    <div class="text-center mb-5">
+      <a href="/api/auth/github" class="btn">
+        <img class="github-logo" src="\scripts\img\632cc59b0ce5f831d6ce0c8c_Screen Shot 2022-09-22 at 4.13.26 PM.jpg" alt="GitHub Logo">
+      </a>
+    </div>
+
 
 <style type="text/css">
   .carrito {
@@ -61,6 +29,9 @@
 
   .form-group {
     width: 40vw;
+  }
+  .github-logo {
+    width: 20vw;
   }
 
   .numero {
