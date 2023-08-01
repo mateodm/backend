@@ -5,13 +5,14 @@ function submitRegister(event) {
     const mail = document.getElementById('mail').value;
     const age = document.getElementById('age').value;
     const password = document.getElementById('password').value;
+    const lastname = document.getElementById("lastname").value;
 
     const formData = {
-      name: name,
+      first_name: name,
+      last_name: lastname,
       mail: mail,
       age: age,
       password: password,
-      role: 0,
       photo: "img.jpg",
     };
     fetch('/api/auth/register', {

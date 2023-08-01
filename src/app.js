@@ -4,27 +4,29 @@ import { connect } from "mongoose"
 import "dotenv/config.js";
 import logger from "morgan";
 import router from "./routes/index.router.js"
-import ProductManager from "./managers/product.js"
-import CartManager from "./managers/cart.js"
 import { engine } from "express-handlebars"
-import { __dirname, __filename } from "./utils.js"
+import { __dirname, __filename } from "./utils/utils.js"
 import errorHandler from "./middlewares/errorHandler.js";
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session"
-import sessionFileStore from "session-file-store"
 import mongoStore from "connect-mongo"
 import passport from "passport";
 import inicializePassport from "./config/passport.js"
+import config from "./config/config.js"
 
+/* VARS CONFIG */
+const cookiesName = config.cookie
+const URL = config.mongoUrl
+const secretSession = config.secretSession
 /* SERVER CONFIG */
 const server = express()
-server.use(cookieParser(process.env.COOKIE_NAME))
+server.use(cookieParser(cookiesName))
 server.use(expressSession({
     store: mongoStore.create({
-        mongoUrl: process.env.URL,ttl:10000
+        mongoUrl: URL,ttl:10000
          }),
-    secret: process.env.SECRET_SESSION,
+    secret: secretSession,
     resave: true,
     saveUninitialized: true
 }))
@@ -58,8 +60,6 @@ inicializePassport()
 server.use(passport.initialize())
 server.use(passport.session())
 
-connect("mongodb+srv://ecommercemongoose:test@cluster0.a5r87to.mongodb.net/ecommerce")
-    .then(() => console.log("mongoose connected"))
-    .catch(err => console.log(err))
-
+/* CONEXION CON MONGO DB*/
+config.connectMDB()
 export default server;

@@ -11,11 +11,12 @@ function listener() {
 listener()
 
 
-async function eventSubmit(id) {
+async function eventSubmit(id, cid) {
     let idNumber = id
     let quantity = document.getElementById("quantity").value
     let data = { quantity }
-    await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${idNumber}`, {
+    let cart = cid
+    await fetch(`/api/cart/${cart}/products/${idNumber}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -87,18 +88,18 @@ function active() {
     socket.emit("product-find", currentPath)
 }
 
-socket.on("detail-product", data => {
+socket.on("detail-product", (product, cid)=> {
     let location = document.getElementById("detail")
     location.innerHTML = ` 
     <div class="card col-md-12 my-5 mb-5 mx-5" style="width: 18rem;">
         <img src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg" class="card-img-top" alt="...">
         <div class="card-body">
-        <h5 class="card-title">${data.title}</h5>
-        <p class="card-text"> ${data.description}   </p>
-        <p class="card-text"><b>${data.price}$</b></p>
-        <p id="stock" class="card-text">Stock: ${data.stock} </p>
+        <h5 class="card-title">${product.title}</h5>
+        <p class="card-text"> ${product.description}   </p>
+        <p class="card-text"><b>${product.price}$</b></p>
+        <p id="stock" class="card-text">Stock: ${product.stock} </p>
         <input id="quantity" name="quantity" class="my-3" type="number" value="1" />
-        <button id="boton" class="btn"  onclick="eventSubmit('${data._id.toString()}')" style="background-color: #83b674; color: white;" >Agregar al carrito</button>
+        <button id="boton" class="btn"  onclick="eventSubmit('${product._id.toString()}', '${cid}')" style="background-color: #83b674; color: white;" >Agregar al carrito</button>
     </div>
     `
 })

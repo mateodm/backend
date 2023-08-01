@@ -1,9 +1,16 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import GHStrategy from "passport-github2"
+import jwt from "passport-jwt"
 import User from "../models/user.model.js";
+import Cart from "../models/cart.model.js";
+import config from "./config.js";
 
-const {GITHUB_CLIENTID, SECRET_CLIENT} = process.env
+
+const JWTStrategy = jwt.Strategy;
+
+const SECRET_CLIENT = config.secretClient
+const GITHUB_CLIENTID = config.clientID 
 const callback = "http://localhost:8080/api/auth/github/callback"
 export default function () {
     passport.serializeUser((user, done) => done(null, user._id))
@@ -16,8 +23,12 @@ export default function () {
         try {
             let user = await User.findOne({ mail: username })
             if (!user) {
-                let user = await User.create(req.body)
-                return done(null, user)
+                const user = req.body
+                const newCart = new Cart({});
+                const cartSave = await newCart.save();
+                user.cart = cartSave._id
+                let create = await User.create(user)
+                return done(null, create)
             }
             return done(null, false)
         }
@@ -63,3 +74,22 @@ passport.use(
         }
     )
 )
+passport.use('jwt', new jwt.Strategy({
+        jwtFromRequest: jwt.ExtractJwt.fromExtractors([(req)=>req?.cookies['token']]),
+        secretOrKey: process.env.JWT_SECRET
+    },
+    async (jwt_payload,done) => {
+        try {              
+            let user = await User.findOne({ email:jwt_payload.email })
+            if (user) {    
+                delete user.password
+                return done(null, user)
+            } else {
+                return done(null, false)
+            }
+        } catch (error) {
+            return done(error,false)
+        }
+    })
+)
+passport.authenticate("jwt", {session: false})

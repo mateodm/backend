@@ -1,2 +1,2 @@
-const socket = io();
+const socket = io({query: { cookies: document.cookie }});
 

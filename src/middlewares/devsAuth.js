@@ -1,5 +1,8 @@
+import jwt from "jsonwebtoken";
 function auth (req, res, next) {
-    if (req.session?.role === 1) {
+    const token = req.cookies.token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role === 1 || decoded.role === "admin") {
         return next()
     }
     return res.status(401).send("not authorized")

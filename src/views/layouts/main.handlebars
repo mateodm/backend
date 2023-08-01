@@ -27,34 +27,34 @@
                             <a class="nav-link text-white" aria-current="page" href="/">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            {{#if session.mail}}
+                            {{#if mail}}
                             <a class="nav-link text-white" href="/products">Productos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/chat">Chat</a>
                         </li>
                         {{/if}}
-                        {{#unless session.mail}}
+                        {{#unless mail}}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/register">Register</a>
                         </li>
                         {{/unless}}
-                        {{#unless session.mail}}
+                        {{#unless mail}}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/signin">Sign-in</a>
                         </li>
                         {{/unless}}
-                        {{#if session.mail}}
+                        {{#if mail}}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/api/auth/signout">Sign-out</a>
                         </li>
                         {{/if}}
-                        {{#ifEquals session.role 1}}
+                        {{#ifEquals role 1}}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="/new_product">New Product</a>
                         </li>
                         {{/ifEquals}}
-                        {{#if session.mail}}
+                        {{#if mail}}
                         <li class="nav-item">
                             <a href="/cart"><img class="carrito"
                                     src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>

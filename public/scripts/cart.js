@@ -14,7 +14,7 @@ socket.on("cartLength", (data) => {
   document.getElementById("carrito").innerHTML = data;
 });
 
-socket.on("card-cart", (data) => {
+socket.on("card-cart", (data, cid) => {
   let location = document.getElementById("cart")
   location.innerHTML = ""
   data.forEach((data) => {
@@ -37,16 +37,16 @@ socket.on("card-cart", (data) => {
       <p class="mb-0" style="font-weight: 500;">${product.description}</p>
     </td>
     <td class="align-middle justify-content-center border-bottom-0">
-      <button class="quantity" type="submit" onclick="subtractUnit('${product._id.toString()}', ${quantity})")>-</button>
+      <button class="quantity" type="submit" onclick="subtractUnit('${product._id.toString()}', ${quantity},'${cid}')")>-</button>
         ${quantity}
-      <button class="quantity" type="submit" onclick="addUnit('${product._id.toString()}', ${quantity})")>+</button>
+      <button class="quantity" type="submit" onclick="addUnit('${product._id.toString()}', ${quantity}, '${cid}')">+</button>
 
     </td>
     <td class="align-middle border-bottom-0">
       <p class="mb-0" style="font-weight: 500;">${product.price}</p>
     </td>
     <td class="align-middle border-bottom-0">
-    <button class="deleteButton" type="submit" data-product-id="${product._id.toString()}" onclick="getPID('${product._id.toString()}')""><img class="tachito" src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000"></button>
+    <button class="deleteButton" type="submit" data-product-id="${product._id.toString()}" onclick="getPID('${product._id.toString()}', '${cid}')"><img class="tachito" src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000"></button>
     </td> `
     location.appendChild(tr)
   })
@@ -67,11 +67,11 @@ socket.on("amount", (data) => {
   </tbody>
 </table> `
 })
-async function subtractUnit(id, quantity) {
+async function subtractUnit(id, quantity, cid) {
   let pid = id
   if (quantity > 1) {
     let newQuantity = quantity - 1
-    await fetch(`api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}/${newQuantity}/subtract`, {
+    await fetch(`api/cart/${cid}/products/${pid}/${newQuantity}/subtract`, {
       method: "PUT",
     })
   }
@@ -81,35 +81,35 @@ async function subtractUnit(id, quantity) {
   socket.emit("card")
   socket.emit("totalamount")
 }
-async function addUnit(id, quantity) {
+async function addUnit(id, quantity, cid) {
   let pid = id
   let newQuantity = quantity + 1
   if (pid && newQuantity) {
-    await fetch(`api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}/${newQuantity}/add`, {
+    await fetch(`api/cart/${cid}/products/${pid}/${newQuantity}/add`, {
       method: "PUT",
     })
   }
   socket.emit("card")
   socket.emit("totalamount")
 }
-async function getPID(id) {
+async function getPID(id, cid) {
   pid = id;
-  await fetch(`/api/cart/6490cf8ae17a7f96df15d3f4/products/${pid}`, {
+  await fetch(`/api/cart/${cid}/products/${pid}`, {
     method: 'DELETE',
   }).then(response => response.json())
-  .then(data => {
-    if (data.success === true) {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        width:"300px",
-        heigth:"20px",
-        title: 'Product removed succesfully',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    }
-  })
+    .then(data => {
+      if (data.success === true) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          width: "300px",
+          heigth: "20px",
+          title: 'Product removed succesfully',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
   socket.emit("card")
   socket.emit("totalamount")
 };
