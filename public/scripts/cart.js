@@ -53,7 +53,7 @@ socket.on("card-cart", (data, cid) => {
 
 })
 
-socket.on("amount", (data) => {
+socket.on("amount", (data, cid, mail) => {
   console.log(document.getElementsByClassName("totalAmount"))
   document.getElementById("amount").innerHTML = `     
   <table class="table">
@@ -63,10 +63,24 @@ socket.on("amount", (data) => {
     </tr>
   </thead>
   <tbody id="cart">
-
   </tbody>
-</table> `
+</table> 
+${data > 0 ? `<button onclick="purchaseOrder('${cid}', '${mail}')" class="btn btn-success"> Comprar </button>` : ''}
+`
+
 })
+async function purchaseOrder(cid, mail) {
+  let bodyP = { purchaser: mail }
+  await fetch(`api/cart/${cid}/purchase`, {
+    method: "POST", headers: {
+      "Content-Type": "application/json"
+    }, body: JSON.stringify(bodyP)
+  }).then(response => response.json()).then(response => {
+    if(response. success === true) {
+      window.location.reload()
+    }
+  })
+}
 async function subtractUnit(id, quantity, cid) {
   let pid = id
   if (quantity > 1) {
@@ -87,6 +101,19 @@ async function addUnit(id, quantity, cid) {
   if (pid && newQuantity) {
     await fetch(`api/cart/${cid}/products/${pid}/${newQuantity}/add`, {
       method: "PUT",
+    }).then(response => response.json())
+    .then(data => {
+      if (data.success === false) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          width: "300px",
+          heigth: "20px",
+          title: 'You have reached the maximum stock',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
     })
   }
   socket.emit("card")

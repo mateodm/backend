@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import MongoSingleton from "./singleton.js";
 import dotenv from "dotenv"
 import { commander } from "../utils/commander.js";
 
@@ -16,13 +17,7 @@ export default  {
     secretSession: process.env.SECRET_SESSION,
     secretClient : process.env.SECRET_CLIENT,
     clientID: process.env.GITHUB_CLIENTID,
-    connectMDB: async () => {
-        try {
-            await mongoose.connect(process.env.URL)
-        }
-        catch(error) {
-            console.log(error)
-        }
-    }
+    persistence: process.env.PERSISTENCE,
+    connectMDB: () => MongoSingleton.getInstance()
     
 }

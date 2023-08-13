@@ -1,4 +1,3 @@
-
 <section>
   <div class="row">
     <div class="col-md-12 d-grid justify-content-center my-5">
@@ -12,6 +11,9 @@
   <div class="row body">
     {{#each data}}
     <div class="card col-md-4 my-3 mb-5 mx-5" style="width: 14rem;">
+      {{#ifEquals stock 0}}
+      <h5 class="d-flex justify-content-center" style="color: red;">Out of stock</h4>
+      {{/ifEquals}}
       <img
         src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
         class="card-img-top" alt="...">
@@ -37,7 +39,6 @@
   .carrito {
     height: 3.4vh;
   }
-
   .numero {
     background-color: black;
     border-radius: 100%;
@@ -65,5 +66,3 @@
     min-height: 80vh;
   }
 </style>
-
-

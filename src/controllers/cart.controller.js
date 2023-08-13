@@ -2,7 +2,8 @@
 
 import Products from "../models/product.model.js";
 import Cart from "../models/cart.model.js"
-import {productService, cartService} from "../service/index.js"
+import { productService, cartService, ticketService } from "../service/index.js"
+import Ticket from "../models/ticket.model.js";
 class CartController {
     async getCarts(req, res, next) {
         try {
@@ -32,7 +33,7 @@ class CartController {
         try {
             const cart = await cartService.create()
             return res.json({ status: 200, cart: cart })
-    
+
         }
         catch (error) {
             next(error)
@@ -44,15 +45,18 @@ class CartController {
             let pid = req.params.pid;
             let quantity = Number(req.body.quantity);
             let cart = await cartService.getById(cid)
+            let product = await productService.getById(pid)
+            let stock = product.stock
             let cartProducts = cart.products
             let check = cartProducts.find(cart => cart.product === pid)
             if (!check) {
-                let update = await cartService.update(cid, pid, quantity)
-                let getStock = await productService.getById(pid)
-                let newQuantity = getStock.stock - quantity;
-                await Products.findByIdAndUpdate(pid, { stock: newQuantity })
-                if (cid, pid) {
+                if (quantity <= product.stock) {
+                    let update = await cartService.update(cid, pid, quantity)
+                    let getStock = await productService.getById(pid)
                     return res.json({ success: true, status: 200, update: update })
+                }
+                else {
+                    return res.json({ success: false, status: 400, message: "Not indicated stock available" })
                 }
             }
             else {
@@ -63,72 +67,14 @@ class CartController {
             next(error)
         }
     }
-    async addUnit(req, res, next) {
-        try {
-            let cid = req.params.cid
-            let pid = req.params.pid
-            let quantity = req.params.quantity
-            let product = await productService.getById(pid)
-            let check = product.stock
-            if (cid && pid && quantity && check >= 1) {
-                await Cart.findByIdAndUpdate(cid, {
-                    $set: {
-                      "products.$[elem].quantity": quantity
-                    }
-                  }, {
-                    arrayFilters: [{ "elem.product": pid }]
-                  });
-                let getStock = await productService.getById(pid)
-                let newQuantity = (Number(getStock.stock) - 1);
-                let body = { stock: newQuantity }
-                await productService.update(pid, body)
-                return res.json({
-                    status: 200,
-                })
-            }
-            }
-            catch(error) {
-                console.log(error)
-            }
-    }
-    async substractUnit(req, res, next) {
-        try {
-            let cid = req.params.cid
-            let pid = req.params.pid
-            let quantity = req.params.quantity
-            if (cid && pid && quantity) {
-                await Cart.findByIdAndUpdate(cid, {
-                    $set: {
-                      "products.$[elem].quantity": quantity
-                    }
-                  }, {
-                    arrayFilters: [{ "elem.product": pid }]
-                  });
-                const getStock = await productService.getById(pid)
-                const newQuantity = (Number(getStock.stock) + 1);
-                const body = { stock: newQuantity }
-                await productService.update(pid, body)
-                return res.json({
-                    status: 200,
-                })
-            }
-            }
-            catch(error) {
-                console.log(error)
-            }
-    }
+
     async deleteCart(req, res, next) {
         try {
             let cid = req.params.cid
             let pid = req.params.pid
             const cart = await cartService.getById(cid)
             const products = cart.products
-            console.log(products.product)
-            let quantity = products.find((product) => product.product === pid)
-            let product = await productService.getById(pid)
-            let newQuantity = Number(product.stock) + Number(quantity.quantity)
             if (cid, pid) {
-                await Products.findByIdAndUpdate(pid, { stock: newQuantity })
                 const updatedCart = await Cart.findOneAndUpdate(
                     { _id: cid },
                     { $pull: { products: { product: pid } } },
@@ -159,7 +105,99 @@ class CartController {
             total: amount,
         })
     }
+    async purchaseRequest(req, res, next) {
+        try {
+            if (req.params.cid && req.body.purchaser) {
+                const cid = req.params.cid;
+                let amount = 0
+                let code = 0;
+                const cart = await cartService.getByIdAndPopulate(cid);
+                const productsInCart = cart.products;
+                const tickets = await ticketService.getTickets();
+                const notStockP = [];
+                const successProducts = [];
+                if (tickets.length > 0) {
+                    code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
+                }
+                for (const productInfo of productsInCart) {
+                    const check = await productService.getById(productInfo.product._id);
+                    if (check.stock >= productInfo.quantity) {
+                        successProducts.push({ ...check, quantity: productInfo.quantity })
+                    } else {
+                        notStockP.push(check);
+                    }
+                }
+                for (const product of successProducts) {
+                    let price = Number(product._doc.price) * Number(product.quantity);
+                    console.log(price)
+                    amount = Number(amount) + Number(price);
+                    const substract = Number(product._doc.stock) - Number(product.quantity);
+                    await Products.findByIdAndUpdate(product._doc._id, { stock: substract });
+                }
+                await cartService.updateAndClear(cid);
+                const body = { ...req.body, code: code, amount: amount, product: successProducts };
+                await ticketService.create(body);
+                return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
+            } else {
+                return res.json({ success: false, message: "Params missing" })
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    async addUnit(req, res, next) {
+        try {
+            let cid = req.params.cid
+            let pid = req.params.pid
+            let quantity = req.params.quantity
+            let product = await productService.getById(pid)
+            let check = product.stock
+            if (cid && pid && quantity) {
+                if (quantity <= product.stock) {
+                    await Cart.findByIdAndUpdate(cid, {
+                        $set: {
+                            "products.$[elem].quantity": quantity
+                        }
+                    }, {
+                        arrayFilters: [{ "elem.product": pid }]
+                    });
+                    return res.json({
+                        status: 200,
+                    })
+                }
+                else {
+                    return res.json({ status: 400, success: false })
+                }
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+    async substractUnit(req, res, next) {
+        try {
+            let cid = req.params.cid
+            let pid = req.params.pid
+            let quantity = req.params.quantity
+            if (cid && pid && quantity) {
+                await Cart.findByIdAndUpdate(cid, {
+                    $set: {
+                        "products.$[elem].quantity": quantity
+                    }
+                }, {
+                    arrayFilters: [{ "elem.product": pid }]
+                });
+                return res.json({
+                    status: 200,
+                })
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 }
-const { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart } = new CartController();
+const { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest } = new CartController();
 
-export { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart }
+export { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest }

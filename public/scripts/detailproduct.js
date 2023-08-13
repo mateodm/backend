@@ -42,7 +42,7 @@ async function eventSubmit(id, cid) {
                     title: 'Oops...',
                     width:"300px",
                     heigth:"20px",
-                    text: 'Product already in the cart',
+                    text: 'Product already in the cart or not indicated stock available',
                   })
             }
         })
@@ -60,24 +60,6 @@ socket.on("change_stock", product => {
     location.innerHTML = product.stock
 })
 
-/* socket.on("load_products", async data => {
-    let location = document.getElementById("products")
-    location.innerHTML = ""
-    data.map((product) => {
-        const card = document.createElement("div")
-        card.className = "card col-md-4 my-5 mb-5 mx-5";
-        card.style = "width: 18rem;";
-        card.innerHTML = `
-        <img src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">${product.title}</h5>
-            <p class="card-text">${product.description}</p>
-            <a href="/products/${product._id}" class="btn"style="background-color: #83b674; color: white;">Ver más información</a>
-        </div>
-        `
-        location.appendChild(card)
-    })
-}) */
 
 document.addEventListener("DOMContentLoaded", function (e) {
     active()

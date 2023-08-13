@@ -18,6 +18,7 @@ socket_server.on("connection", (socket) => {
     if(cookies) {    const token = cookies.match(/token=([^;]+)/)[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     let cid = decoded.cart
+    let mail = decoded.mail
     socket.on("auth", () => {
         return null;
     })
@@ -41,7 +42,7 @@ socket_server.on("connection", (socket) => {
             let price = Number(product.product.price) * product.quantity
             amount = amount + price
         })
-        socket.emit("amount", amount)
+        socket.emit("amount", amount, cid, mail)
     })
     socket.on("new_stock", async data => {
         let product = await Products.findById(data)

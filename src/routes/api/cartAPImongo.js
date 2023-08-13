@@ -3,7 +3,7 @@ import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
 import Products from "../../models/product.model.js";
 import Cart from "../../models/cart.model.js";
-import { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart} from "../../controllers/cart.controller.js"
+import { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest} from "../../controllers/cart.controller.js"
 import auth from "../../middlewares/devsAuth.js";
 import passport_call from "../../middlewares/passport_call.js";
 
@@ -20,5 +20,6 @@ router.put("/:cid/products/:pid/:quantity/add",  passport_call("jwt"),addUnit )
 router.put("/:cid/products/:pid/:quantity/subtract",  passport_call("jwt"), substractUnit)
 router.delete("/:cid/products/:pid",  passport_call("jwt"), deleteCart)
 router.get("/bills/:cid",  passport_call("jwt"), totalAmount)
+router.post("/:cid/purchase",  passport_call("jwt"), purchaseRequest)
 
 export default router

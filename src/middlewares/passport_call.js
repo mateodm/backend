@@ -7,12 +7,10 @@ export default (strategy)=> {
             (err,user,info)=> {
                 
                 if (err) {
-                    return next(err)
+                    return next(err).redirect
                 }
                 if (!user) {
-                    return res.status(401).json({
-                        error: info.messages ? info.messages : info.toString()
-                    })
+                    return res.status(401).redirect("/signin")
                 }
                 req.user = user
                 return next()

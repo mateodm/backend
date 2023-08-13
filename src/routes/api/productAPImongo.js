@@ -2,7 +2,6 @@ import { Router } from "express";
 import Products from "../../models/product.model.js";
 import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
-import ProductManager from "../../dao/productmongo.js";
 import auth from "../../middlewares/devsAuth.js"
 import passport_call from "../../middlewares/passport_call.js";
 import { getProducts, getProductById, createProduct, deleteProduct, updateProduct} from "../../controllers/product.controller.js"

@@ -28,6 +28,7 @@ class ProductController {
             title: product.title,
             description: product.description,
             price: product.price,
+            stock: product.stock,
             _id: product._id,
         }));
         let load = true;
