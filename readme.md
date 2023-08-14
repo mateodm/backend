@@ -4,6 +4,9 @@
 <h2> WEBSOCKET ACTIVO</h2>
 <h2> IMPLEMENTACION MONGODB Y MONGOOSE</h2>
 <h2> POPULATES & INDEX</h2>
+<h2>IMPLEMENTACIÓN DE CAPAS</h2>
+<H2> MAILING </h2>
+<h2> Configuradas las ENV, utilizar ENV.DEVEPLOPMENT</h2>
 <ul>
 <h3><b>Rutas views</b></h3>
 <li>localhost:8080/products - <b>obtienes lista de productos</b></li>

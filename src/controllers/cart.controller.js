@@ -1,9 +1,10 @@
-
-
 import Products from "../models/product.model.js";
 import Cart from "../models/cart.model.js"
-import { productService, cartService, ticketService } from "../service/index.js"
+import generateEmailContent from "../utils/mailTemplate.js" 
 import Ticket from "../models/ticket.model.js";
+import sendMail from "../utils/mailer.js"
+import { productService, cartService, ticketService } from "../service/index.js"
+
 class CartController {
     async getCarts(req, res, next) {
         try {
@@ -129,15 +130,33 @@ class CartController {
                 }
                 for (const product of successProducts) {
                     let price = Number(product._doc.price) * Number(product.quantity);
-                    console.log(price)
                     amount = Number(amount) + Number(price);
                     const substract = Number(product._doc.stock) - Number(product.quantity);
-                    await Products.findByIdAndUpdate(product._doc._id, { stock: substract });
+                    await productService.update(product._doc._id, { stock: substract });
                 }
-                await cartService.updateAndClear(cid);
-                const body = { ...req.body, code: code, amount: amount, product: successProducts };
-                await ticketService.create(body);
-                return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
+                /* SEND MAIL */
+                const productRows = successProducts.map(product => `
+                <tr>
+                    <td>${product._doc.code}</td>
+                    <td>${product._doc.title}</td>
+                    <td>${product.quantity}</td>
+                    <td>$${product._doc.price}</td>
+                    <td>$${amount}</td>
+                </tr>
+                `).join('');
+                const emailContent = generateEmailContent(productRows, req.body.purchaser, amount);
+                const message = emailContent;
+                if (amount > 0 && successProducts.length > 0) {
+                    const body = { ...req.body, code: code, amount: amount, product: successProducts };
+                    const productIdsToRemove = successProducts.map(product => product._doc._id.toString());
+                    await cartService.findByIdAndUpdate({ _id: cid },{ $pull: { products: { product: { $in: productIdsToRemove } } } },{ new: true });
+                    let ticket = await ticketService.create(body);
+                    await sendMail(req.body.purchaser, message)
+                    return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
+                }
+                else {
+                    return res.json({ success: false, failedProducts: notStockP})
+                }
             } else {
                 return res.json({ success: false, message: "Params missing" })
             }

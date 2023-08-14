@@ -4,6 +4,7 @@ import carts_router from "../views/carts.router.js"
 import cartAPImongo from "./cartAPImongo.js"
 import productAPImongo from "./productAPImongo.js"
 import cookies from "./cookies.js"
+import sendMail from "../../utils/mailer.js"
 import authentication from "./auth.router.js"
 /* 
 import cartAPI from "./cartAPI.js"

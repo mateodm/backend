@@ -76,8 +76,19 @@ async function purchaseOrder(cid, mail) {
       "Content-Type": "application/json"
     }, body: JSON.stringify(bodyP)
   }).then(response => response.json()).then(response => {
-    if(response. success === true) {
+    if(response.success === true) {
       window.location.reload()
+    }
+    else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          width: "300px",
+          heigth: "20px",
+          title: 'One of the products not have stock, please try remove this',
+          showConfirmButton: false,
+          timer: 1500
+        })
     }
   })
 }

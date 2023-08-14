@@ -10,6 +10,8 @@ dotenv.config({
 });
 
 export default  {
+    gmail_username: process.env.GMAIL_USER,
+    gmail_password: process.env.GMAIL_PASSWORD,
     port: process.env.PORT || 8080,
     mongoUrl: process.env.URL,
     jwt_key: process.env.JWT_SECRET,
