@@ -2,14 +2,27 @@
 import Products from "../models/product.model.js";
 import productService from "../service/productService.js"
 import jwt from "jsonwebtoken";
+import Errorss from "../service/error/errors.js"
+import CustomError from "../utils/customError.js"
 
 class ProductController {
-    async getProducts(req, res) {
-        let products = await productService.getProducts()
-        return res.json({
-            success: true,
-            products: products,
-        })
+    async getProducts(req, res, next) {
+        try {
+
+            let products = await productService.getProducts()
+            if (products) {
+                return res.json({
+                    success: true,
+                    products: products,
+                })
+            }
+            else {
+                CustomError.createError({ name: "Product not loaded", cause: "Database not works", code: Errorss.DATABASE_ERROR })
+            }
+        }
+        catch (error) {
+            next(error)
+        }
     }
     async getProductsView(req, res) {
         const title = req.query.title || '';
@@ -21,9 +34,9 @@ class ProductController {
         const totalPages = Math.ceil(count / pageSize);
         const totalPagesArray = Array.from({ length: totalPages }, (_, index) => index + 1);
         const products = await Products.find({ title: titleRegex })
-          .skip(skip)
-          .limit(pageSize)
-          .exec();
+            .skip(skip)
+            .limit(pageSize)
+            .exec();
         const actProducts = products.map(product => ({
             title: product.title,
             description: product.description,
@@ -34,10 +47,11 @@ class ProductController {
         let load = true;
         const token = req.cookies.token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return res.render("products", {load,data: actProducts,totalPages: totalPagesArray,role: decoded.role, mail: decoded.mail,cart: decoded.cart,
+        return res.render("products", {
+            load, data: actProducts, totalPages: totalPagesArray, role: decoded.role, mail: decoded.mail, cart: decoded.cart,
         });
     }
-    async getProductById(req, res) {
+    async getProductById(req, res, next) {
         try {
             let id = req.params.pid
             let data = await productService.getById(id)
@@ -45,7 +59,7 @@ class ProductController {
                 return res.json({ status: 200, data })
             }
             else {
-                return res.json({ message })
+                CustomError.createError({ name: "Product not found", cause: ["Invalid id:" + id], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
@@ -55,58 +69,59 @@ class ProductController {
     async getProductView(req, res) {
         const token = req.cookies.token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            return res.render("product",{
-                success: true,
-                role: decoded.role, 
-                mail: decoded.mail,
-                cart: decoded.cart,
-            })
+        return res.render("product", {
+            success: true,
+            role: decoded.role,
+            mail: decoded.mail,
+            cart: decoded.cart,
+        })
     }
-    async createProduct(req, res) {
+    async createProduct(req, res, next) {
         try {
             let create = await productService.create(req.body)
+            if(create) {
             return res.redirect("/products")
+            }
+            else {
+                CustomError.createError({name: "Params missing", cause: ["error:" + create], code: Errorss.PARAMS_MISSING_ERROR })
+            }
         }
         catch (error) {
-            return res.json({
-                success: false,
-                status: 400,
-                message: "Params missing",
-            })
+            next(error)
         }
     }
-    async updateProduct(req, res) {
-    try {
-        let id = req.params.pid
-        let data = req.body
-        let update = await productService.update(id, data)
-        if (update) {
-            return res.json({ status: 200, product: update })
+    async updateProduct(req, res, next) {
+        try {
+            let id = req.params.pid
+            let data = req.body
+            let update = await productService.update(id, data)
+            if (update) {
+                return res.json({ status: 200, product: update })
+            }
+            else {
+                CustomError.createError({name: "Product not updated", cause: [update], code: Errorss.INVALID_TYPE_ERROR})
+            }
         }
-        else {
-            return res.json({ status: 404 })
-        }
-    }
-    catch (error) {
-        next(error)
-    }
-}
-    async deleteProduct(req, res) {
-    try {
-        let id = req.params.pid
-        await productService.delete(id)
-        if (id) {
-            return res.json({
-                status: 200
-            })
-        }
-        else {
-            return res.json({ message })
+        catch (error) {
+            next(error)
         }
     }
-    catch (error) {
-        next(error)
-    }
+    async deleteProduct(req, res, next) {
+        try {
+            let id = req.params.pid
+            await productService.delete(id)
+            if (id) {
+                return res.json({
+                    status: 200
+                })
+            }
+            else {
+                CustomError.createError({name: "not product deleted", cause: "Fail product ID", code: Errorss.INVALID_TYPE_ERROR})
+            }
+        }
+        catch (error) {
+            next(error)
+        }
     }
 }
 const { createProduct, deleteProduct, getProductById, getProducts, updateProduct, getProductsView, getProductView } = new ProductController();

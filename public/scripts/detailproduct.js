@@ -42,7 +42,7 @@ async function eventSubmit(id, cid) {
                     title: 'Oops...',
                     width:"300px",
                     heigth:"20px",
-                    text: 'Product already in the cart or not indicated stock available',
+                    text: data.cause,
                   })
             }
         })

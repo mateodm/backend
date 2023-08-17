@@ -1,15 +1,19 @@
 import Products from "../models/product.model.js";
 import Cart from "../models/cart.model.js"
-import generateEmailContent from "../utils/mailTemplate.js" 
-import Ticket from "../models/ticket.model.js";
-import sendMail from "../utils/mailer.js"
 import { productService, cartService, ticketService } from "../service/index.js"
-
+import Errorss from "../service/error/errors.js"
+import CustomError from "../utils/customError.js"
+import Ticket from "../models/ticket.model.js";
 class CartController {
     async getCarts(req, res, next) {
         try {
             let Carts = await cartService.getCarts()
+            if(Carts) {
             return res.json({ status: 200, carts: Carts })
+            }
+            else {
+                CustomError.createError({name: "Cart not loaded", cause: "Database not works", code: Errorss.DATABASE_ERROR})
+            }
         }
         catch (error) {
             next(error)
@@ -23,7 +27,7 @@ class CartController {
                 return res.json({ status: 200, cart: cartFind })
             }
             else {
-                return res.json({})
+                CustomError.createError({name: "Cart not found", cause: "Invalidad CID", code: Errorss.INVALID_TYPE_ERROR})
             }
         }
         catch (error) {
@@ -34,7 +38,6 @@ class CartController {
         try {
             const cart = await cartService.create()
             return res.json({ status: 200, cart: cart })
-
         }
         catch (error) {
             next(error)
@@ -57,11 +60,11 @@ class CartController {
                     return res.json({ success: true, status: 200, update: update })
                 }
                 else {
-                    return res.json({ success: false, status: 400, message: "Not indicated stock available" })
+                    CustomError.createError({name: "Add product to the cart fail", cause: ["Not indicated stock available"], code: Errorss.INVALID_TYPE_ERROR})
                 }
             }
             else {
-                return res.json({ success: false, status: 400, error: "El producto ya existe" })
+                CustomError.createError({name: "Add product to the cart fail", cause: ["Product already in the cart"], code: Errorss.INVALID_TYPE_ERROR})
             }
         }
         catch (error) {
@@ -71,19 +74,24 @@ class CartController {
 
     async deleteCart(req, res, next) {
         try {
-            let cid = req.params.cid
-            let pid = req.params.pid
-            const cart = await cartService.getById(cid)
-            const products = cart.products
-            if (cid, pid) {
-                const updatedCart = await Cart.findOneAndUpdate(
-                    { _id: cid },
-                    { $pull: { products: { product: pid } } },
-                    { new: true }
-                ).populate("products.product", "title description stock thumbnail price code");
-                return res.json({
-                    success: true, status: 200, updatedCart
-                })
+            if (req.params.cid, req.params.pid) {
+                let cid = req.params.cid
+                let pid = req.params.pid
+                const cart = await cartService.getById(cid)
+                const products = cart.products
+                if (cid, pid) {
+                    const updatedCart = await Cart.findOneAndUpdate(
+                        { _id: cid },
+                        { $pull: { products: { product: pid } } },
+                        { new: true }
+                    ).populate("products.product", "title description stock thumbnail price code");
+                    return res.json({
+                        success: true, status: 200, updatedCart
+                    })
+                }
+            }
+            else {
+                CustomError.createError({ name: "Invalid cart", cause: ["cart id:" + cid, "product id" + pid], code: Errorss.INVALID_TYPE_ERROR})
             }
         }
         catch (error) {
@@ -130,39 +138,21 @@ class CartController {
                 }
                 for (const product of successProducts) {
                     let price = Number(product._doc.price) * Number(product.quantity);
+                    console.log(price)
                     amount = Number(amount) + Number(price);
                     const substract = Number(product._doc.stock) - Number(product.quantity);
-                    await productService.update(product._doc._id, { stock: substract });
+                    await Products.findByIdAndUpdate(product._doc._id, { stock: substract });
                 }
-                /* SEND MAIL */
-                const productRows = successProducts.map(product => `
-                <tr>
-                    <td>${product._doc.code}</td>
-                    <td>${product._doc.title}</td>
-                    <td>${product.quantity}</td>
-                    <td>$${product._doc.price}</td>
-                    <td>$${amount}</td>
-                </tr>
-                `).join('');
-                const emailContent = generateEmailContent(productRows, req.body.purchaser, amount);
-                const message = emailContent;
-                if (amount > 0 && successProducts.length > 0) {
-                    const body = { ...req.body, code: code, amount: amount, product: successProducts };
-                    const productIdsToRemove = successProducts.map(product => product._doc._id.toString());
-                    await cartService.findByIdAndUpdate({ _id: cid },{ $pull: { products: { product: { $in: productIdsToRemove } } } },{ new: true });
-                    let ticket = await ticketService.create(body);
-                    await sendMail(req.body.purchaser, message)
-                    return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
-                }
-                else {
-                    return res.json({ success: false, failedProducts: notStockP})
-                }
+                await cartService.updateAndClear(cid);
+                const body = { ...req.body, code: code, amount: amount, product: successProducts };
+                await ticketService.create(body);
+                return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
             } else {
-                return res.json({ success: false, message: "Params missing" })
+                CustomError.createError({name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR})
             }
         }
         catch (e) {
-            console.log(e)
+            next(e)
         }
     }
     async addUnit(req, res, next) {
@@ -186,12 +176,12 @@ class CartController {
                     })
                 }
                 else {
-                    return res.json({ status: 400, success: false })
+                    CustomError.createError({name: "Fail subsstract/add unit", cause: ["cart id:" + cid + "product id:" + pid + "actual quantity" + quantity], code: Errorss.INVALID_TYPE_ERROR})
                 }
             }
         }
         catch (error) {
-            console.log(error)
+            next(error)
         }
     }
     async substractUnit(req, res, next) {
@@ -211,9 +201,12 @@ class CartController {
                     status: 200,
                 })
             }
+            else {
+                CustomError.createError({name: "Fail subsstract/add unit", cause: ["cart id:" + cid + "product id:" + pid + "actual quantity" + quantity], code: Errorss.INVALID_TYPE_ERROR})
+            }
         }
         catch (error) {
-            console.log(error)
+            next(error)
         }
     }
 }

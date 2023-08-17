@@ -1,65 +1,35 @@
+import CartManager from "../dao/cartdao.js";
 
-import Carts from "../models/cart.model.js"
-import mongoose from "mongoose";
-export default class CartManager {
+export default class CartRepository {
     constructor() {
-        this.Carts = Carts;
+        this.cartDAO = new CartManager();
     }
+
     async getCarts() {
-        try {
-            return await this.Carts.find({})
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return await this.cartDAO.getCarts();
     }
+
     async getById(id) {
-        try {
-            return await this.Carts.findById(id)
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return await this.cartDAO.getById(id);
     }
+
     async getByIdAndPopulate(id) {
-        try {
-            return await this.Carts.findById(id).populate({
-                path: 'products',
-                populate: {
-                    path: 'product',
-                    model: "products"
-                }
-            }).exec()
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return await this.cartDAO.getByIdAndPopulate(id);
     }
+
     async create() {
-        try {
-            return await this.Carts.create({})
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return await this.cartDAO.create();
     }
+
     async update(cid, pid, quantity) {
-        return await this.Carts.findByIdAndUpdate(cid, {
-            $push: {
-                products: {
-                    product: pid,
-                    quantity: quantity
-                }
-            }
-        })
+        return await this.cartDAO.update(cid, pid, quantity);
     }
-    async findByIdAndUpdate(cid, toUpdate) {
-        return await this.Carts.findOneAndUpdate(cid, toUpdate)
+
+    async updateAndClear(cid) {
+        return await this.cartDAO.updateAndClear(cid);
     }
-    async update(cid, toUpdate) {
-        return await this.Carts.findByIdAndUpdate(cid, toUpdate)
-    }
+
     async delete(id) {
-        return await this.Carts.findByIdAndDelete(id)
+        return await this.cartDAO.delete(id);
     }
 }
