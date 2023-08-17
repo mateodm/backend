@@ -23,7 +23,7 @@ function submitLogin(event) {
             icon: 'success',
             width:"300px",
             heigth:"20px",
-            title: 'Has been log-in succesfully',
+            title: 'Has been login succesfully',
             showConfirmButton: false,
             timer: 2500
           })

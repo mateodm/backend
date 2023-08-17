@@ -2,7 +2,7 @@
 import express, { query } from "express"
 import { connect } from "mongoose"
 import "dotenv/config.js";
-import logger from "morgan";
+import logger from "./config/loger.js";
 import router from "./routes/index.router.js"
 import { engine } from "express-handlebars"
 import { __dirname, __filename } from "./utils/utils.js"
