@@ -2,7 +2,7 @@
 import express, { query } from "express"
 import { connect } from "mongoose"
 import "dotenv/config.js";
-import logger from "./config/loger.js";
+import addLogger from "./middlewares/loggerMiddle.js"
 import router from "./routes/index.router.js"
 import { engine } from "express-handlebars"
 import { __dirname, __filename } from "./utils/utils.js"
@@ -50,7 +50,7 @@ server.use("/", router);
 server.use("", express.static('public'));
 /* server.use(express.static(`${__dirname}/public`)); */
 server.use(express.urlencoded({ extended: true }));
-server.use(logger("dev"));
+server.use(addLogger);
 
 /* Error Handler */
 
