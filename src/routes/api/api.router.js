@@ -5,6 +5,7 @@ import cartAPImongo from "./cartAPImongo.js"
 import productAPImongo from "./productAPImongo.js"
 import cookies from "./cookies.js"
 import sendMail from "../../utils/mailer.js"
+import generateProduct from "../../utils/mock.js"
 import authentication from "./auth.router.js"
 /* 
 import cartAPI from "./cartAPI.js"
@@ -18,4 +19,11 @@ router.use("/cart", cartAPImongo)
 router.use("/products", productAPImongo)
 router.use("/cookies", cookies)
 router.use("/auth", authentication)
+router.get("/mockproducts", async(req, res) => {
+    let products = []
+    for (let i = 0; i < 100; i++) {
+        products.push(generateProduct())
+    }
+    return res.json({product: products})
+})
 export default router
