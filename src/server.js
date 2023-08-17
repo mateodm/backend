@@ -4,12 +4,13 @@ import Products from "./models/product.model.js";
 import Cart from "./models/cart.model.js";
 import jwt from "jsonwebtoken";
 import config from "./config/config.js"
+import logger from "./config/loger.js";
 
 
 
 const PORT = config.port  /*  Si esta disponible el puerto 8080 utilizara el mismo, si no se usara otro. */
 const chat = []
-const ready = () => console.log("server ready on port " + PORT)
+const ready = () => logger.info("Server ready in port " + PORT )
 const http_server = server.listen(PORT, ready)
 const socket_server = new Server(http_server)
 

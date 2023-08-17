@@ -1,32 +1,27 @@
+import ProductManager from "../dao/productdao.js";
 
-import Products from "../models/product.model.js"
-export default class ProductManager {
+export default class ProductRepository {
     constructor() {
-        this.Products = Products;
+        this.productManager = new ProductManager();
     }
+
     async getProducts() {
-        try {
-            return await this.Products.find({})
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return await this.productManager.getProducts();
     }
+
     async getById(id) {
-        try {
-            return await this.Products.findById(id)
-        }
-        catch(e) {
-            console.log(e)
-        }
+        return await this.productManager.getById(id);
     }
+
     async create(body) {
-        return await this.Products.create(body)
+        return await this.productManager.create(body);
     }
+
     async update(id, body) {
-        return await this.Products.findByIdAndUpdate(id, body, {new: true})
+        return await this.productManager.update(id, body);
     }
+
     async delete(id) {
-        return await this.Products.findByIdAndDelete(id)
+        return await this.productManager.delete(id);
     }
 }

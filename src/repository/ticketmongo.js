@@ -1,29 +1,23 @@
+import TicketManager from "../dao/ticketdao.js";
 
-import Ticket from "../models/ticket.model.js"
-export default class TicketManager {
+export default class TicketRepository {
     constructor() {
-        this.Ticket = Ticket;
+        this.ticketManager = new TicketManager();
     }
+
     async getTickets() {
-        try {
-            return await this.Ticket.find({})
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return await this.ticketManager.getTickets();
     }
+
     async getById(id) {
-        try {
-            return await this.Ticket.findById(id)
-        }
-        catch(e) {
-            console.log(e)
-        }
+        return await this.ticketManager.getById(id);
     }
+
     async create(body) {
-        return await this.Ticket.create(body)
+        return await this.ticketManager.create(body);
     }
+
     async delete(id) {
-        return await this.Ticket.findByIdAndDelete(id)
+        return await this.ticketManager.delete(id);
     }
 }

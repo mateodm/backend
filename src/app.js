@@ -6,7 +6,6 @@ import logger from "morgan";
 import router from "./routes/index.router.js"
 import { engine } from "express-handlebars"
 import { __dirname, __filename } from "./utils/utils.js"
-import errorHandler from "./middlewares/errorHandler.js";
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session"
@@ -14,6 +13,7 @@ import mongoStore from "connect-mongo"
 import passport from "passport";
 import inicializePassport from "./config/passport.js"
 import config from "./config/config.js"
+import errorMidleware from "./middlewares/errorMiddleware.js";
 
 /* VARS CONFIG */
 const cookiesName = config.cookie
@@ -54,7 +54,7 @@ server.use(logger("dev"));
 
 /* Error Handler */
 
-server.use(errorHandler);
+server.use(errorMidleware)
 server.use(notFoundHandler)
 inicializePassport()
 server.use(passport.initialize())
