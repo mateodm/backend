@@ -4,7 +4,7 @@ import Products from "./models/product.model.js";
 import Cart from "./models/cart.model.js";
 import jwt from "jsonwebtoken";
 import config from "./config/config.js"
-import logger from "./config/loger.js";
+import {logger} from "./config/loger.js"
 
 
 

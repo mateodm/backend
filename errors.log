@@ -1,0 +1,18 @@
+{"level":"warn","message":"Esto es una advertencia!!"}
+warning: Esto es una advertencia!!
+warning: Esto es una advertencia!!
+error: Esto es un error
+warning: Esto es una advertencia!!
+warning: Esto es una advertencia!! - 20:57:43
+warning: Esto es una advertencia!! - 20:59:44
+error: Esto es un error - 20:59:44
+fatal: Esto es un error fatal - 20:59:44
+warning: Esto es una advertencia!! - 21:01:55
+error: Esto es un error - 21:01:55
+fatal: Esto es un error fatal - 21:01:55
+[33mwarning[39m: Esto es una advertencia!! - 21:02:26
+[31merror[39m: Esto es un error - 21:02:26
+[31mfatal[39m: Esto es un error fatal - 21:02:26
+warning: Esto es una advertencia!! - 21:22:43
+error: Esto es un error - 21:22:43
+fatal: Esto es un error fatal - 21:22:43
