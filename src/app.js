@@ -15,22 +15,28 @@ import passport from "passport";
 import inicializePassport from "./config/passport.js"
 import config from "./config/config.js"
 import errorMidleware from "./middlewares/errorMiddleware.js";
+import {specs} from "./utils/swagger.js"
+import swaggerUiExpress from "swagger-ui-express";
 
 /* VARS CONFIG */
 const cookiesName = config.cookie
+
 const URL = config.mongoUrl
 const secretSession = config.secretSession
 /* SERVER CONFIG */
 const server = express()
+server.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 server.use(cookieParser(cookiesName))
 server.use(expressSession({
-    store: mongoStore.create({
+    store: mongoStore.create({                       
         mongoUrl: URL,ttl:10000
          }),
     secret: secretSession,
     resave: true,
     saveUninitialized: true
 }))
+
+/* Swagger */
 
 
 /* HANDLERBARS */

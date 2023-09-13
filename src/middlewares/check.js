@@ -1,6 +1,6 @@
 import Errorss from "../service/error/errors.js"
 import CustomError from "../utils/customError.js"
-import User from "../models/user.model.js"
+import {userService} from "../service/index.js"
 import generateUserError from "../utils/generateUserError.js"
 async function check(req, res, next) {
     try {
@@ -9,7 +9,7 @@ async function check(req, res, next) {
             CustomError.createError({ name: "Register error", cause: JSON.stringify(generateUserError(first_name, last_name, mail, age)), message: "Error registering user", code: Errorss.PARAMS_MISSING_ERROR })
         }
         else {
-            let user = await User.findOne({mail:req.body.mail})
+            let user = await userService.findOne({mail:req.body.mail})
             if (!user) {
                 next()
             }

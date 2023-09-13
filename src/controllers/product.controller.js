@@ -78,12 +78,20 @@ class ProductController {
     }
     async createProduct(req, res, next) {
         try {
-            let create = await productService.create(req.body)
-            if(create) {
-            return res.redirect("/products")
+            const token = req.cookies.token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            if (decoded.role === "admin" || decoded.role === "premium") {
+                req.body.created_by = decoded.mail
+                let create = await productService.create(req.body)
+                if (create) {
+                    return res.redirect("/products")
+                }
+                else {
+                    CustomError.createError({ name: "Params missing", cause: ["error:" + create], code: Errorss.PARAMS_MISSING_ERROR })
+                }
             }
             else {
-                CustomError.createError({name: "Params missing", cause: ["error:" + create], code: Errorss.PARAMS_MISSING_ERROR })
+                CustomError.createError({ name: "Not authorized", cause: ["Not user premiun or admin"], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
@@ -94,12 +102,13 @@ class ProductController {
         try {
             let id = req.params.pid
             let data = req.body
+            console.log(data)
             let update = await productService.update(id, data)
             if (update) {
                 return res.json({ status: 200, product: update })
             }
             else {
-                CustomError.createError({name: "Product not updated", cause: [update], code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Product not updated", cause: [update], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
@@ -109,21 +118,57 @@ class ProductController {
     async deleteProduct(req, res, next) {
         try {
             let id = req.params.pid
-            await productService.delete(id)
-            if (id) {
-                return res.json({
-                    status: 200
-                })
+            let product = await productService.getById(id)
+            const token = req.cookies.token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            if (decoded.mail === product.created_by || decoded.role === "admin") {
+                await productService.delete(id)
+                if (productService) {
+                    return res.status(200).redirect("/products")
+                }
+                else {
+                    CustomError.createError({ name: "not product deleted", cause: "Fail product ID", code: Errorss.INVALID_TYPE_ERROR })
+                }
             }
             else {
-                CustomError.createError({name: "not product deleted", cause: "Fail product ID", code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Not authorized to delete product", cause: "Not the owner of the publication or not admin", code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
             next(error)
         }
     }
+    async productManager(req, res, next) {
+        try {
+            const token = req.cookies.token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            if (decoded.role === "admin") {
+                let products = await productService.getProducts()
+                return res.render("productManager", {
+                    products: products,
+                    role: decoded.role,
+                    mail: decoded.mail,
+                    cart: decoded.cart,
+                })
+            }
+            else if (decoded.role === "premium") {
+                let products = await productService.find({ created_by: decoded.mail })
+                return res.render("productManager", {
+                    products: products,
+                    role: decoded.role,
+                    mail: decoded.mail,
+                    cart: decoded.cart,
+                },)
+            }
+            else {
+                CustomError.createError({ name: "Not authorized", cause: "Not the owner or admin", code: Errorss.INVALID_TYPE_ERROR })
+            }
+        }
+        catch (error) {
+            CustomError.createError({ name: "Catch error", cause: error, code: Errorss.INVALID_TYPE_ERROR })
+        }
+    }
 }
-const { createProduct, deleteProduct, getProductById, getProducts, updateProduct, getProductsView, getProductView } = new ProductController();
+const { createProduct, deleteProduct, getProductById, getProducts, updateProduct, getProductsView, getProductView, productManager } = new ProductController();
 
-export { createProduct, deleteProduct, getProductById, getProducts, updateProduct, getProductsView, getProductView }
+export { createProduct, deleteProduct, getProductById, getProducts, updateProduct, getProductsView, getProductView, productManager }

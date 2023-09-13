@@ -24,4 +24,7 @@ export default class ProductRepository {
     async delete(id) {
         return await this.productManager.delete(id);
     }
+    async find(body) {
+        return await this.productManager.find(body)
+    }
 }

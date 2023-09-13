@@ -4,6 +4,9 @@ import { productService, cartService, ticketService } from "../service/index.js"
 import Errorss from "../service/error/errors.js"
 import CustomError from "../utils/customError.js"
 import Ticket from "../models/ticket.model.js";
+import generateEmailContent from "../utils/mailTemplate.js"
+import sendMail from "../utils/mailer.js"
+
 class CartController {
     async getCarts(req, res, next) {
         try {
@@ -27,7 +30,7 @@ class CartController {
                 return res.json({ status: 200, cart: cartFind })
             }
             else {
-                CustomError.createError({name: "Cart not found", cause: "Invalidad CID", code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({name: "Cart not found", cause: "Invalid CID", code: Errorss.INVALID_TYPE_ERROR})
             }
         }
         catch (error) {
@@ -138,14 +141,25 @@ class CartController {
                 }
                 for (const product of successProducts) {
                     let price = Number(product._doc.price) * Number(product.quantity);
-                    console.log(price)
                     amount = Number(amount) + Number(price);
                     const substract = Number(product._doc.stock) - Number(product.quantity);
                     await Products.findByIdAndUpdate(product._doc._id, { stock: substract });
                 }
+                const productRows = successProducts.map(product => `
+                <tr>
+                    <td>${product._doc.code}</td>
+                    <td>${product._doc.title}</td>
+                    <td>${product.quantity}</td>
+                    <td>$${product._doc.price}</td>
+                    <td>$${amount}</td>
+                </tr>
+                `).join('');
+                const emailContent = generateEmailContent(productRows, req.body.purchaser, amount);
+                const message = emailContent;
                 await cartService.updateAndClear(cid);
                 const body = { ...req.body, code: code, amount: amount, product: successProducts };
                 await ticketService.create(body);
+                await sendMail(req.body.purchaser, message)
                 return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
             } else {
                 CustomError.createError({name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR})

@@ -1,0 +1,145 @@
+paths:
+  /api/products:
+    get:
+      summary: "Get all products"
+      tags:
+        - Products
+      responses:
+        '200':
+          description: "Products returned successfully"
+        '401':
+          description: "Not authorized, need JWT authentication"
+        '400':
+          description: "Bad request, missing or invalid parameters"
+    post:
+      summary: "Create a new product"
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "The title of the product"
+                  example: "Product Name"
+                description:
+                  type: string
+                  description: "The description of the product"
+                  example: "Product description"
+                stock:
+                  type: integer
+                  description: "The stock quantity of the product"
+                  example: 100
+                thumbnail:
+                  type: string
+                  description: "The URL of the product's thumbnail image"
+                  example: "https://example.com/thumbnail.jpg"
+                price:
+                  type: number
+                  description: "The price of the product"
+                  example: 200
+                code:
+                  type: string
+                  description: "The product code or identifier"
+                  example: "PRD123"
+                created_by:
+                  type: string
+                  description: "The email of the creator (default is 'admin')"
+                  example: "john_doe@mail.com"
+      responses:
+        '200':
+          description: "Product created successfully"
+        '401':
+          description: "Not authorized"
+        '400':
+          description: "Bad request, missing or invalid parameters"
+  /api/products/{pid}:
+    get:
+      summary: "Get a product by ID"
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          description: "The ID of the product to retrieve"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Product found successfully"
+        '401':
+          description: "Not authorized"
+        '400':
+          description: "Bad request, missing or invalid parameters"
+    delete:
+      summary: "Delete a product by ID"
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          description: "The ID of the product to delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Product deleted successfully"
+        '401':
+          description: "Not authorized"
+        '400':
+          description: "Bad request, missing or invalid parameters"
+    put:
+      summary: "Update a product"
+      description: "Update a product by providing its ID and the fields you want to modify. Admin permissions are required."
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          description: "The ID of the product to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "The updated title of the product"
+                description:
+                  type: string
+                  description: "The updated description of the product"
+                stock:
+                  type: integer
+                  description: "The updated stock quantity of the product"
+                thumbnail:
+                  type: string
+                  description: "The updated URL of the product's thumbnail image"
+                price:
+                  type: number
+                  description: "The updated price of the product"
+                code:
+                  type: string
+                  description: "The updated product code or identifier"
+                created_by:
+                  type: string
+                  description: "The email of the creator (default is 'admin')"
+      responses:
+        '200':
+          description: "Product updated successfully"
+        '401':
+          description: "Not authorized"
+        '400':
+          description: "Bad request, missing or invalid parameters"
+tags:
+  - name: Products

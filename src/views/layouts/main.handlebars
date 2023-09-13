@@ -2,217 +2,233 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="sweetalert2.min.css">
-    <title>Backend</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" href="sweetalert2.min.css">
+  <title>Backend</title>
 </head>
 
 <body>
-    <header>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #83b674;">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                    data-mdb-target="#navbarExample01" aria-controls="navbarExample01" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarExample01">
-                    <ul class="navbar-nav me-auto d-flex justify-content-center align-items-center mb-2 mb-lg-0">
-                        <li class="nav-item active">
-                            <a class="nav-link text-white" aria-current="page" href="/">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            {{#if mail}}
-                            <a class="nav-link text-white" href="/products">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/chat">Chat</a>
-                        </li>
-                        {{/if}}
-                        {{#unless mail}}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/register">Register</a>
-                        </li>
-                        {{/unless}}
-                        {{#unless mail}}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/signin">Sign-in</a>
-                        </li>
-                        {{/unless}}
-                        {{#if mail}}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/api/auth/signout">Sign-out</a>
-                        </li>
-                        {{/if}}
-                        {{#ifEquals role 1}}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="/new_product">New Product</a>
-                        </li>
-                        {{/ifEquals}}
-                        {{#if mail}}
-                        <li class="nav-item">
-                            <a href="/cart"><img class="carrito"
-                                    src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
-                            <span id="carrito" class="numero text-white"></span>
-                        </li>
-                        {{/if}}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="content">
+  <header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #83b674;">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+          aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarExample01">
+          <ul class="navbar-nav me-auto d-flex justify-content-center align-items-center mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link text-white" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+              {{#if mail}}
+              <a class="nav-link text-white" href="/products">Productos</a>
+            </li>
+            {{/if}}
+            {{#unless mail}}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/register">Register</a>
+            </li>
+            {{/unless}}
+            {{#unless mail}}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/signin">Sign-in</a>
+            </li>
+            {{/unless}}
+            {{#if mail}}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/api/auth/signout">Sign-out</a>
+            </li>
+            {{/if}}
+            {{#ifEquals role "premium"}}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/new_product">New Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/products/my-products/view">My products</a>
+            </li>
+            {{/ifEquals}}
+            {{#ifEquals role "admin"}}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/new_product">New Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/products/my-products/view">Manage products</a>
+            </li>
+            {{/ifEquals}}
+            {{#ifEquals role "user"}}
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/api/premium">Give premium</a>
+            </li>
+            {{/ifEquals}}
+            {{#if mail}}
+            <li class="nav-item">
+              <a href="/cart"><img class="carrito"
+                  src="https://cdn-icons-png.flaticon.com/512/107/107831.png?w=826&t=st=1684874915~exp=1684875515~hmac=4e323ee324cb8723eddafaf00dbf77a78c0e67718f36cb36676a61934d30e5d3"></a>
+              <span id="carrito" class="numero text-white"></span>
+            </li>
+            {{/if}}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="content">
     {{{ body}}}
-    </div>
-    <footer class="text-center text-lg-start footer" style="background-color:#83b674; color: white; text-decoration: none; height: 20vh;">
-  <!-- Grid container -->
-  <div class="container p-4">
-    <!--Grid row-->
-    <div class="row">
-      <!--Grid column-->
-      <div class="col-lg-3 col-md-6 mb-md-0">
-        <h5 class="text-uppercase">Links</h5>
-
-        <ul class="list-unstyled mb-0">
-          <li>
-            <a class="href" href="#!" >Link 1</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 2</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 3</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 4</a>
-          </li>
-        </ul>
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-3 col-md-6 mb-md-0">
-        <h5 class="text-uppercase mb-0">Links</h5>
-
-        <ul class="list-unstyled">
-          <li>
-            <a class="href"href="#!">Link 1</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 2</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 3</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 4</a>
-          </li>
-        </ul>
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-3 col-md-6 mb-md-0">
-        <h5 class="text-uppercase">Links</h5>
-
-        <ul class="list-unstyled mb-0">
-          <li>
-            <a class="href" href="#!">Link 1</a>
-          </li>
-          <li>
-            <a class="href" href="#!" >Link 2</a>
-          </li>
-          <li>
-            <a class="href"href="#!" >Link 3</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 4</a>
-          </li>
-        </ul>
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-3 col-md-6 mb-md-0">
-        <h5 class="text-uppercase mb-0">Links</h5>
-
-        <ul class="list-unstyled">
-          <li>
-            <a class="href" href="#!">Link 1</a>
-          </li>
-          <li>
-            <a class="href"href="#!">Link 2</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 3</a>
-          </li>
-          <li>
-            <a class="href" href="#!">Link 4</a>
-          </li>
-        </ul>
-      </div>
-      <!--Grid column-->
-    </div>
-    <!--Grid row-->
   </div>
-  <!-- Grid container -->
+  <footer class="text-center text-lg-start footer"
+    style="background-color:#83b674; color: white; text-decoration: none; height: 20vh;">
+    <!-- Grid container -->
+    <div class="container p-4">
+      <!--Grid row-->
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-md-0">
+          <h5 class="text-uppercase">Links</h5>
 
-  <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: #74b693; color: white;">
-    © 2020 Copyright:
-    <a class="href" href="https://mdbootstrap.com/">MDBootstrap.com</a>
-  </div>
-  <!-- Copyright -->
-</footer>
-    <style>
-        html,
-        body {
-            height: 100% !important;
-            overflow-x: hidden;
-        }
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a class="href" href="#!">Link 1</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 2</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 3</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 4</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
 
-        .container {
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-md-0">
+          <h5 class="text-uppercase mb-0">Links</h5>
 
-        .content {
-            flex: 1 0 auto;
-        }
+          <ul class="list-unstyled">
+            <li>
+              <a class="href" href="#!">Link 1</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 2</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 3</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 4</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
 
-        .footer {
-            flex-shrink: 0;
-        }
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-md-0">
+          <h5 class="text-uppercase">Links</h5>
 
-        .carrito {
-            height: 3.4vh;
-        }
-        .href {
-            text-decoration: none;
-            color: white;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
-    <script src="/scripts/connection.js"></script>
-    {{#if script}}
-    <script src="/scripts/chat.js"></script>
-    {{/if}}
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a class="href" href="#!">Link 1</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 2</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 3</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 4</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
 
-    <script src="/scripts/detailproduct.js"></script>
-    <script src="/scripts/cart.js"></script>
-    <script src="/scripts/search.js"></script>
-    <script src="/scripts/register.js"></script>
-    <script src="/scripts/login.js"></script>
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-md-0">
+          <h5 class="text-uppercase mb-0">Links</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a class="href" href="#!">Link 1</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 2</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 3</a>
+            </li>
+            <li>
+              <a class="href" href="#!">Link 4</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: #74b693; color: white;">
+      © 2020 Copyright:
+      <a class="href" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <style>
+    html,
+    body {
+      height: 100% !important;
+      overflow-x: hidden;
+    }
+
+    .container {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      flex: 1 0 auto;
+    }
+
+    .footer {
+      flex-shrink: 0;
+    }
+
+    .carrito {
+      height: 3.4vh;
+    }
+
+    .href {
+      text-decoration: none;
+      color: white;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
+  <script src="/scripts/connection.js"></script>
+  {{#if script}}
+  <script src="/scripts/chat.js"></script>
+  {{/if}}
+
+  <script src="/scripts/detailproduct.js"></script>
+  <script src="/scripts/forgotpassword.js" ></script>
+  <script src="/scripts/cart.js"></script>
+  <script src="/scripts/search.js"></script>
+  <script src="/scripts/manager.js"></script>
+  <script src="/scripts/register.js"></script>
+  <script src="/scripts/login.js"></script>
 </body>
 
 </html>

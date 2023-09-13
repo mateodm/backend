@@ -30,20 +30,20 @@ async function eventSubmit(id, cid) {
                     position: 'top-end',
                     icon: 'success',
                     title: 'Product added succesfully',
-                    width:"300px",
-                    heigth:"20px",
+                    width: "300px",
+                    heigth: "20px",
                     showConfirmButton: false,
                     timer: 1500
                 })
             }
-            else if(data.success === false) {
+            else if (data.success === false) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    width:"300px",
-                    heigth:"20px",
+                    width: "300px",
+                    heigth: "20px",
                     text: data.cause,
-                  })
+                })
             }
         })
         .catch(error => {
@@ -70,7 +70,7 @@ function active() {
     socket.emit("product-find", currentPath)
 }
 
-socket.on("detail-product", (product, cid)=> {
+socket.on("detail-product", (product, cid) => {
     let location = document.getElementById("detail")
     location.innerHTML = ` 
     <div class="card col-md-12 my-5 mb-5 mx-5" style="width: 18rem;">
@@ -81,7 +81,9 @@ socket.on("detail-product", (product, cid)=> {
         <p class="card-text"><b>${product.price}$</b></p>
         <p id="stock" class="card-text">Stock: ${product.stock} </p>
         <input id="quantity" name="quantity" class="my-3" type="number" value="1" />
-        <button id="boton" class="btn"  onclick="eventSubmit('${product._id.toString()}', '${cid}')" style="background-color: #83b674; color: white;" >Agregar al carrito</button>
+        <div class="d-flex justify-content-center">
+            <button id="boton" class="btn me-4"  onclick="eventSubmit('${product._id.toString()}', '${cid}')" style="background-color: #83b674; color: white;" >Agregar al carrito</button>
+        </div>
     </div>
     `
 })

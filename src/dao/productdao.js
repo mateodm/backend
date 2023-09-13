@@ -6,7 +6,7 @@ export default class ProductManager {
     }
     async getProducts() {
         try {
-            return await this.Products.find({})
+            return await this.Products.find({}).lean()
         }
         catch (e) {
             console.log(e)
@@ -28,5 +28,8 @@ export default class ProductManager {
     }
     async delete(id) {
         return await this.Products.findByIdAndDelete(id)
+    }
+    async find(body) {
+        return await this.Products.find(body).lean()
     }
 }

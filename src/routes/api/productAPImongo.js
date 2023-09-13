@@ -11,8 +11,8 @@ const router = Router()
 /* AÑADIR PRODUCTO */
 
 router.get("/", auth, getProducts)
-router.post("/post", auth, createProduct)
+router.post("/post", createProduct)
 router.get("/:pid" ,  passport_call("jwt"), getProductById)
-router.delete("/:pid", auth, deleteProduct)
+router.delete("/:pid", deleteProduct)
 router.put("/:pid", auth, updateProduct)
 export default router

@@ -1,7 +1,7 @@
 import { compareSync } from "bcrypt"
 import Errorss from "../service/error/errors.js"
 import CustomError from "../utils/customError.js"
-import User from "../models/user.model.js"
+import {userService} from "../service/index.js"
 
 export default async function validPassword(req, res, next) {
     try {

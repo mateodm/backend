@@ -6,5 +6,5 @@ const transport = nodemailer.createTransport({
 })
 
 export default async function sendMail(to, message) {
-    return await transport.sendMail({from: "<gtathetrilogycj@gmail.com>", to: to || "gtathetrilogycj@gmail.com", subject: "prueba mailer", html: message || "<h1>Prueba mailer</h1>"})
+    return await transport.sendMail({from: "<gtathetrilogycj@gmail.com>", to: to || "gtathetrilogycj@gmail.com", subject: "E-Commerce Backend", html: message || "<h1>Prueba mailer</h1>"})
 }

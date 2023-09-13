@@ -7,6 +7,7 @@ import cookies from "./cookies.js"
 import sendMail from "../../utils/mailer.js"
 import generateProduct from "../../utils/mock.js"
 import authentication from "./auth.router.js"
+import {  givePremium } from "../../controllers/user.controller.js"
 import { logger } from "../../config/loger.js";
 /* 
 import cartAPI from "./cartAPI.js"
@@ -36,4 +37,5 @@ router.get("/logger", (req, res) => {
     req.logger.debug(`debug - ${new Date().toLocaleTimeString()}`)
     return res.send(`Works`)
 })
+router.get("/premium", givePremium)
 export default router

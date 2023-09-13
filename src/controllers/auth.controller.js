@@ -1,4 +1,3 @@
-import User from "../models/user.model.js"
 
 class userController {
     async register(req, res, next) {
@@ -23,6 +22,7 @@ class userController {
             return res.json({ success: false, status: 400, message: error })
         }
     }
+
     async signout(req, res) {
         try {
             return res.status(200).clearCookie('token').redirect("/")
