@@ -4,7 +4,7 @@ function listener() {
   if (url !== "http://localhost:8080/cart") {
     socket.emit("length")
   }
-  else if (url === "http://localhost:8080/cart") {
+  else if (url === "/cart" && url !== "https://backend-ecommerce-r1ay.onrender.com/cart") {
     socket.emit("card")
     socket.emit("totalamount")
   }

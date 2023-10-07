@@ -46,6 +46,7 @@
     "sweetalert2": "^11.7.5",
     "winston": "^3.10.0"
   },
+
   "description": "",
   "devDependencies": {
     "@faker-js/faker": "^8.0.2"
