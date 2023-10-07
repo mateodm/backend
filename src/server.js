@@ -16,7 +16,8 @@ const socket_server = new Server(http_server)
 
 socket_server.on("connection", (socket) => {
     const cookies  = socket.handshake.query.cookies;
-    if(cookies) {    const token = cookies.match(/token=([^;]+)/)[1];
+    if(cookies) {    
+    const token = cookies.match(/token=([^;]+)/)[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     let cid = decoded.cart
     let mail = decoded.mail
