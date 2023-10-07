@@ -122,11 +122,16 @@ class CartController {
         try {
             if (req.params.cid && req.body.purchaser) {
                 const cid = req.params.cid;
+                let amount = 0
+                let code = 0;
                 const cart = await cartService.getByIdAndPopulate(cid);
                 const productsInCart = cart.products;
                 const tickets = await ticketService.getTickets();
                 const notStockP = [];
                 const successProducts = [];
+                if (tickets.length > 0) {
+                    code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
+                }
                 for (const productInfo of productsInCart) {
                     const check = await productService.getById(productInfo.product._id);
                     if (check.stock >= productInfo.quantity) {
@@ -173,6 +178,7 @@ class CartController {
                     auto_return: "approved",
                 };
                 const mpresponse = await mercadopago.preferences.create(preference);
+                console.log(mpresponse.body)
                 return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
             } else {
                 CustomError.createError({ name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR });
