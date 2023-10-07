@@ -15,10 +15,10 @@ router.post("/ticket", async (req, res) => {
     const signature = req.headers["x-signature"];
     const secretKey = config.mercadopagoKey
     const expectedSignature = crypto
-    console.log(secretKey)
     .createHmac("sha256", secretKey)
     .update(JSON.stringify(body))
     .digest("hex");
+    console.log(secretKey)
     console.log(expectedSignature)
     console.log("Firma recibida:", signature)
     console.log("hola", req.body)
