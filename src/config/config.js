@@ -5,9 +5,9 @@ import { commander } from "../utils/commander.js";
 
 const {mode} = commander.opts()
 
-dotenv.config({
+/* dotenv.config({
     path: mode === 'development' ? './.env.development' : './.env.production'
-});
+}); */
 
 export default  {
     gmail_username: process.env.GMAIL_USER,
