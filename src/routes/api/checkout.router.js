@@ -10,6 +10,7 @@ const router = Router()
 
 router.post("/ticket", async (req, res) => {
     console.log(req.headers)
+    return res.sendStatus(200)
 })
 
 export default router
