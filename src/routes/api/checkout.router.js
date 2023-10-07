@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport_call from "../../middlewares/passport_call.js";
 import passport from "../../config/passport.js";
-import { ticketService } from "../../service/index.js";
+import {  productService, cartService, ticketService } from "../../service/index.js";
 import generateEmailContent from "../../utils/mailTemplate.js"
 import sendMail from "../../utils/mailer.js"
 import crypto from "crypto"
@@ -11,7 +11,6 @@ const router = Router()
 
 
 router.post("/ticket", async (req, res) => {
-    console.log(req.headers)
     const body = req.body
     const signature = req.headers["x-signature"];
     const secretKey = config.mercadopagoKey
@@ -20,11 +19,17 @@ router.post("/ticket", async (req, res) => {
     .update(JSON.stringify(body))
     .digest("hex");
     if (signature === expectedSignature) {
-        console.log("valido")
-        console.log(body)
-        return res.sendStatus(200)
+        let amount = 0
+        let code = 0;
+        const tickets = await ticketService.getTickets();
+        if (tickets.length > 0) {
+            code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
+            const body = { code: "123", amount: "2", product: "a product" };
+            await ticketService.create(body);
+        }
     }
     else {
+        console.log("fallo")
         return res.sendStatus(400)
     }
 })
