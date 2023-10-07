@@ -11,15 +11,9 @@ const router = Router()
 
 router.post("/ticket", async (req, res) => {
     const body = req.body
-    if (signature === expectedSignature) {
-        console.log("aprobo:", req.body)
-        const ticketBody = { code: "123", amount: "2", product: "a product", purcharser: "yo" };
-        await ticketService.create(ticketBody);
-    }
-    else {
-        console.log("fallo")
-        return res.sendStatus(400)
-    }
+    console.log(req.body)
+    console.log(req.headers)
+    console.log(req)
 })
 
 export default router
