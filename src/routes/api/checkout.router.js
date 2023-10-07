@@ -9,21 +9,7 @@ const router = Router()
 
 
 router.get("/ticket", passport_call("jwt"), async (req, res) => {
-    const queryString = req._parsedOriginalUrl.query;
-    const queryParams = new URLSearchParams(queryString);
-    const mpSignature = queryParams.get('signature');
     console.log(req)
-/*     console.log(mpSignature)
-    queryParams.delete('signature');
-    const orderedParams = Array.from(queryParams.keys()).sort().map(key => `${key}=${queryParams.get(key)}`).join('&');
-    const calculatedSignature = crypto
-    .createHmac('sha256', secretKey)
-    .update(orderedParams)
-    .digest('hex');
-    if (providedSignature === calculatedSignature) {
-    
-    } */
-
 })
 
 export default router
