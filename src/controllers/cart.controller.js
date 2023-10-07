@@ -170,9 +170,9 @@ class CartController {
                 const preference = {
                     items: items,
                     back_urls: {
-                        "success": `http://localhost:8080/api/payment/ticket`,
-                        "failure": "http://localhost:8080/",
-                        "pending": "http://localhost:8080/"
+                        "success": `https://backend-ecommerce-r1ay.onrender.com`,
+                        "failure": "https://backend-ecommerce-r1ay.onrender.com",
+                        "pending": "https://backend-ecommerce-r1ay.onrender.com"
                     },
                     auto_return: "approved",
                 };
