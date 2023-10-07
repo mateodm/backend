@@ -1,7 +1,6 @@
 /* IMPORTS */
 import express, { query } from "express"
 import { connect } from "mongoose"
-
 import "dotenv/config.js";
 import { addLogger } from './config/loger.js'
 import router from "./routes/index.router.js"
@@ -17,9 +16,14 @@ import config from "./config/config.js"
 import errorMidleware from "./middlewares/errorMiddleware.js";
 import {specs} from "./utils/swagger.js"
 import swaggerUiExpress from "swagger-ui-express";
+import mercadopago from "mercadopago"
+
+mercadopago.configurations.setAccessToken(config.mercadopagoKey);
 
 /* VARS CONFIG */
 const cookiesName = config.cookie
+/* MERCADOPAGO */
+
 
 const URL = config.mongoUrl
 const secretSession = config.secretSession

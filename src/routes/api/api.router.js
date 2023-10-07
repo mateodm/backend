@@ -3,6 +3,7 @@ import products_router from "../views/products.router.js"
 import carts_router from "../views/carts.router.js"
 import cartAPImongo from "./cartAPImongo.js"
 import productAPImongo from "./productAPImongo.js"
+import checkout from "./checkout.router.js"
 import cookies from "./cookies.js"
 import sendMail from "../../utils/mailer.js"
 import generateProduct from "../../utils/mock.js"
@@ -21,6 +22,7 @@ router.use("/cart", cartAPImongo)
 router.use("/products", productAPImongo)
 router.use("/cookies", cookies)
 router.use("/auth", authentication)
+router.use("/payment", checkout)
 router.get("/mockproducts", async(req, res) => {
     let products = []
     for (let i = 0; i < 100; i++) {

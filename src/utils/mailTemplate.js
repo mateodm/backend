@@ -26,7 +26,7 @@ export default function generateEmailContent(productRows, purchaser, amount) {
         </style>
         </head>
         <body>
-            <h1>Detalles de la Compra</h1>
+            <h1>Tu orden ha sido generada</h1>
             <table>
                 <tr>
                     <th>Código del producto</th>

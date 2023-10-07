@@ -20,6 +20,8 @@ export default  {
     secretClient : process.env.SECRET_CLIENT,
     clientID: process.env.GITHUB_CLIENTID,
     persistence: process.env.PERSISTENCE,
+    mercadopagoPublic: process.env.MP_PUBLIC,
+    mercadopagoKey: process.env.MP_KEY,
     connectMDB: () => MongoSingleton.getInstance()
     
 }

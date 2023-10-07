@@ -6,16 +6,17 @@ import CustomError from "../utils/customError.js"
 import Ticket from "../models/ticket.model.js";
 import generateEmailContent from "../utils/mailTemplate.js"
 import sendMail from "../utils/mailer.js"
+import mercadopago from "mercadopago"
 
 class CartController {
     async getCarts(req, res, next) {
         try {
             let Carts = await cartService.getCarts()
-            if(Carts) {
-            return res.json({ status: 200, carts: Carts })
+            if (Carts) {
+                return res.json({ status: 200, carts: Carts })
             }
             else {
-                CustomError.createError({name: "Cart not loaded", cause: "Database not works", code: Errorss.DATABASE_ERROR})
+                CustomError.createError({ name: "Cart not loaded", cause: "Database not works", code: Errorss.DATABASE_ERROR })
             }
         }
         catch (error) {
@@ -30,7 +31,7 @@ class CartController {
                 return res.json({ status: 200, cart: cartFind })
             }
             else {
-                CustomError.createError({name: "Cart not found", cause: "Invalid CID", code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Cart not found", cause: "Invalid CID", code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
@@ -63,11 +64,11 @@ class CartController {
                     return res.json({ success: true, status: 200, update: update })
                 }
                 else {
-                    CustomError.createError({name: "Add product to the cart fail", cause: ["Not indicated stock available"], code: Errorss.INVALID_TYPE_ERROR})
+                    CustomError.createError({ name: "Add product to the cart fail", cause: ["Not indicated stock available"], code: Errorss.INVALID_TYPE_ERROR })
                 }
             }
             else {
-                CustomError.createError({name: "Add product to the cart fail", cause: ["Product already in the cart"], code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Add product to the cart fail", cause: ["Product already in the cart"], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
@@ -94,7 +95,7 @@ class CartController {
                 }
             }
             else {
-                CustomError.createError({ name: "Invalid cart", cause: ["cart id:" + cid, "product id" + pid], code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Invalid cart", cause: ["cart id:" + cid, "product id" + pid], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {
@@ -160,13 +161,29 @@ class CartController {
                 const body = { ...req.body, code: code, amount: amount, product: successProducts };
                 await ticketService.create(body);
                 await sendMail(req.body.purchaser, message)
-                return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
+                const items = successProducts.map((product) => ({
+                    id: product._doc._id,
+                    title: product._doc.title,
+                    unit_price: Number(product._doc.price),
+                    quantity: product.quantity,
+                }));
+                const preference = {
+                    items: items,
+                    back_urls: {
+                        "success": `http://localhost:8080/api/payment/ticket`,
+                        "failure": "http://localhost:8080/",
+                        "pending": "http://localhost:8080/"
+                    },
+                    auto_return: "approved",
+                };
+                const mpresponse = await mercadopago.preferences.create(preference);
+                console.log(mpresponse.body)
+                return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
             } else {
-                CustomError.createError({name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR });
             }
-        }
-        catch (e) {
-            next(e)
+        } catch (e) {
+            next(e);
         }
     }
     async addUnit(req, res, next) {
@@ -190,7 +207,7 @@ class CartController {
                     })
                 }
                 else {
-                    CustomError.createError({name: "Fail subsstract/add unit", cause: ["cart id:" + cid + "product id:" + pid + "actual quantity" + quantity], code: Errorss.INVALID_TYPE_ERROR})
+                    CustomError.createError({ name: "Fail subsstract/add unit", cause: ["cart id:" + cid + "product id:" + pid + "actual quantity" + quantity], code: Errorss.INVALID_TYPE_ERROR })
                 }
             }
         }
@@ -216,7 +233,7 @@ class CartController {
                 })
             }
             else {
-                CustomError.createError({name: "Fail subsstract/add unit", cause: ["cart id:" + cid + "product id:" + pid + "actual quantity" + quantity], code: Errorss.INVALID_TYPE_ERROR})
+                CustomError.createError({ name: "Fail subsstract/add unit", cause: ["cart id:" + cid + "product id:" + pid + "actual quantity" + quantity], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {

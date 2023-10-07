@@ -77,7 +77,7 @@ async function purchaseOrder(cid, mail) {
     }, body: JSON.stringify(bodyP)
   }).then(response => response.json()).then(response => {
     if(response.success === true) {
-      window.location.reload()
+      window.location.href = response.link
     }
     else {
         Swal.fire({
