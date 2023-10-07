@@ -157,13 +157,13 @@ class CartController {
                 await ticketService.create(body);
                 await sendMail(req.body.purchaser, message)
                 const items = successProducts.map((product) => ({
+                    cid: cid,
                     id: product._doc._id,
                     title: product._doc.title,
                     unit_price: Number(product._doc.price),
                     quantity: product.quantity,
                 }));
                 const preference = {
-                    cid: cid,
                     items: items,
                     back_urls: {
                         "success": `https://backend-ecommerce-r1ay.onrender.com`,
@@ -173,7 +173,6 @@ class CartController {
                     auto_return: "approved",
                 };
                 const mpresponse = await mercadopago.preferences.create(preference);
-                console.log(mpresponse.body)
                 return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
             } else {
                 CustomError.createError({ name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR });
