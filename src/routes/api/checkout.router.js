@@ -8,8 +8,8 @@ import sendMail from "../../utils/mailer.js"
 const router = Router()
 
 
-router.post("/ticket", passport_call("jwt"), async (req, res) => {
-    console.log(req)
+router.post("/ticket", async (req, res) => {
+    console.log(req.headers)
 })
 
 export default router
