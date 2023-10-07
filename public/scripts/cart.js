@@ -1,10 +1,11 @@
 
 function listener() {
   let url = window.location.href
+  console.log(url)
   if (url !== "http://localhost:8080/cart") {
     socket.emit("length")
   }
-  else if (url === "/cart" && url === "https://backend-ecommerce-r1ay.onrender.com/cart") {
+  else if (url === "/cart" || url === "https://backend-ecommerce-r1ay.onrender.com/cart") {
     socket.emit("card")
     socket.emit("totalamount")
   }
