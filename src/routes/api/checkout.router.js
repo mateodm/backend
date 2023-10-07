@@ -18,6 +18,7 @@ router.post("/ticket", async (req, res) => {
     .createHmac("sha256", secretKey)
     .update(JSON.stringify(body))
     .digest("hex");
+    console.log("hola", req.body)
     if (signature === expectedSignature) {
         console.log("aprobo:", req.body)
         const ticketBody = { code: "123", amount: "2", product: "a product", purcharser: "yo" };
