@@ -24,7 +24,7 @@ router.post("/ticket", async (req, res) => {
         const tickets = await ticketService.getTickets();
         if (tickets.length > 0) {
             code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
-            const body = { code: "123", amount: "2", product: "a product" };
+            const body = { code: "123", amount: "2", product: "a product", purcharser: "yo" };
             await ticketService.create(body);
         }
     }
