@@ -162,13 +162,13 @@ class CartController {
                 await ticketService.create(body);
                 await sendMail(req.body.purchaser, message)
                 const items = successProducts.map((product) => ({
-                    cid: cid,
                     id: product._doc._id,
                     title: product._doc.title,
                     unit_price: Number(product._doc.price),
                     quantity: product.quantity,
                 }));
                 const preference = {
+                    cid: cid,
                     items: items,
                     back_urls: {
                         "success": `https://backend-ecommerce-r1ay.onrender.com`,
