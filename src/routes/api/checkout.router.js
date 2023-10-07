@@ -19,14 +19,9 @@ router.post("/ticket", async (req, res) => {
     .update(JSON.stringify(body))
     .digest("hex");
     if (signature === expectedSignature) {
-        let amount = 0
-        let code = 0;
-        const tickets = await ticketService.getTickets();
-        if (tickets.length > 0) {
-            code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
-            const body = { code: "123", amount: "2", product: "a product", purcharser: "yo" };
-            await ticketService.create(body);
-        }
+        console.log("aprobo")
+        const body = { code: "123", amount: "2", product: "a product", purcharser: "yo" };
+        await ticketService.create(body);
     }
     else {
         console.log("fallo")
