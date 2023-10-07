@@ -10,7 +10,6 @@ const router = Router()
 
 router.post("/ticket", passport_call("jwt"), async (req, res) => {
     console.log(req)
-    console.log("hola")
 })
 
 export default router
