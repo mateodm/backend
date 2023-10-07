@@ -122,16 +122,11 @@ class CartController {
         try {
             if (req.params.cid && req.body.purchaser) {
                 const cid = req.params.cid;
-                let amount = 0
-                let code = 0;
                 const cart = await cartService.getByIdAndPopulate(cid);
                 const productsInCart = cart.products;
                 const tickets = await ticketService.getTickets();
                 const notStockP = [];
                 const successProducts = [];
-                if (tickets.length > 0) {
-                    code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
-                }
                 for (const productInfo of productsInCart) {
                     const check = await productService.getById(productInfo.product._id);
                     if (check.stock >= productInfo.quantity) {
@@ -168,6 +163,7 @@ class CartController {
                     quantity: product.quantity,
                 }));
                 const preference = {
+                    cid: cid,
                     items: items,
                     back_urls: {
                         "success": `https://backend-ecommerce-r1ay.onrender.com`,
