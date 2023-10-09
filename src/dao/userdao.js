@@ -20,9 +20,9 @@ export default class UserManager {
             console.log(e)
         }
     }
-    async update(param, paramvalue, body) {
+    async update(id, param) {
         try {
-            return await this.user.findOneAndUpdate({ mail: paramvalue }, body)
+            return await this.user.findByIdAndUpdate(id, param)
         }
         catch (e) {
             console.log(e)

@@ -158,35 +158,63 @@ class CartController {
                 const emailContent = generateEmailContent(productRows, req.body.purchaser, amount);
                 const message = emailContent;
                 await cartService.updateAndClear(cid);
-                const body = { ...req.body, code: code, amount: amount, product: successProducts };
+                const body = { ...req.body, code: code, amount: amount, product: successProducts, status: "success" };
                 await ticketService.create(body);
                 await sendMail(req.body.purchaser, message)
-                const items = successProducts.map((product) => ({
-                    id: product._doc._id,
-                    title: product._doc.title,
-                    unit_price: Number(product._doc.price),
-                    quantity: product.quantity,
-                }));
-                const preference = {
-                    cid: cid,
-                    items: items,
-                    back_urls: {
-                        "success": `https://backend-ecommerce-r1ay.onrender.com`,
-                        "failure": "https://backend-ecommerce-r1ay.onrender.com",
-                        "pending": "https://backend-ecommerce-r1ay.onrender.com"
-                    },
-                    auto_return: "approved",
-                };
-                const mpresponse = await mercadopago.preferences.create(preference);
-                console.log(mpresponse.body)
-                return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
+                return res.json({ success: true, successProducts: successProducts, failedProducts: notStockP });
             } else {
-                CustomError.createError({ name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR });
+                CustomError.createError({ name: "Fail purchase request", cause: ["Product id:" + req.params.cid + "Purchaser mail:" + req.body.purchaser], code: Errorss.INVALID_TYPE_ERROR })
             }
-        } catch (e) {
-            next(e);
+        }
+        catch (e) {
+            next(e)
         }
     }
+    async mercadopagoRequest(req, res, next) {
+        if (req.params.cid && req.body.purchaser) {
+            const cid = req.params.cid;
+            const cart = await cartService.getByIdAndPopulate(cid);
+            const productsInCart = cart.products;
+            const notStockP = [];
+            const successProducts = [];
+            let amount = 0
+            for (const productInfo of productsInCart) {
+                const check = await productService.getById(productInfo.product._id);
+                if (check.stock >= productInfo.quantity) {
+                    successProducts.push({ ...check, quantity: productInfo.quantity })
+                } else {
+                    notStockP.push(check);
+                }
+            }
+            for (const product of successProducts) {
+                let price = Number(product._doc.price) * Number(product.quantity);
+                amount = Number(amount) + Number(price);
+            }
+            const items = successProducts.map((product) => ({
+                id: product._doc._id,
+                title: product._doc.title,
+                unit_price: Number(product._doc.price),
+                quantity: product.quantity,
+            }));
+            const preference = {
+                cid: cid,
+                items: items,
+                back_urls: {
+                    "success": `https://backend-ecommerce-r1ay.onrender.com`,
+                    "failure": "https://backend-ecommerce-r1ay.onrender.com",
+                    "pending": "https://backend-ecommerce-r1ay.onrender.com"
+                },
+                auto_return: "approved",
+            };
+            await cartService.updateAndClear(cid);
+            const mpresponse = await mercadopago.preferences.create(preference);
+            const body = { ...req.body, code: mpresponse.body.id, amount: amount, product: successProducts };
+            await ticketService.create(body);
+            return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
+
+        }
+    }
+
     async addUnit(req, res, next) {
         try {
             let cid = req.params.cid
@@ -242,6 +270,6 @@ class CartController {
         }
     }
 }
-const { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest } = new CartController();
+const { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest, mercadopagoRequest } = new CartController();
 
-export { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest }
+export { getCarts, deleteCart, createCart, getCartById, totalAmount, substractUnit, addUnit, updateCart, purchaseRequest, mercadopagoRequest }

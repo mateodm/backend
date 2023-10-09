@@ -1,8 +1,7 @@
 
 function listener() {
   let url = window.location.href
-  console.log(url)
-  if (url === "/cart" || url === "https://backend-ecommerce-r1ay.onrender.com/cart") {
+  if (url === "http://localhost:8080/cart" || url === "https://backend-ecommerce-r1ay.onrender.com/cart") {
     socket.emit("card")
     socket.emit("totalamount")
   }
@@ -67,12 +66,45 @@ socket.on("amount", (data, cid, mail) => {
   </tbody>
 </table> 
 ${data > 0 ? `<button onclick="purchaseOrder('${cid}', '${mail}')" class="btn btn-success"> Comprar </button>` : ''}
+${data > 0 ? `<button onclick="purchaseOrderMP('${cid}', '${mail}')" class="btn btn-success"> Comprar con mercadopago </button>` : ''}
 `
 
 })
 async function purchaseOrder(cid, mail) {
   let bodyP = { purchaser: mail }
   await fetch(`api/cart/${cid}/purchase`, {
+    method: "POST", headers: {
+      "Content-Type": "application/json"
+    }, body: JSON.stringify(bodyP)
+  }).then(response => response.json()).then(response => {
+    if(response.success === true) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        width: "300px",
+        heigth: "20px",
+        title: 'Done, ticket created',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      window.location.reload()
+    }
+    else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          width: "300px",
+          heigth: "20px",
+          title: 'One of the products not have stock, please try remove this',
+          showConfirmButton: false,
+          timer: 1500
+        })
+    }
+  })
+}
+async function purchaseOrderMP(cid, mail) {
+  let bodyP = { purchaser: mail }
+  await fetch(`api/cart/${cid}/purchasemp`, {
     method: "POST", headers: {
       "Content-Type": "application/json"
     }, body: JSON.stringify(bodyP)

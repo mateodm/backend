@@ -22,7 +22,12 @@ const ticket = new mongoose.Schema({
   purchaser: {
     type: String,
     required: true
-  }
+  },
+  status: {
+    type: String,
+    default: "pending",
+    required: true,
+  },
 });
 
 const Ticket = mongoose.model(collection, ticket);

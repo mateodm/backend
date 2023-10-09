@@ -8,7 +8,8 @@ class userController {
         const token = req.cookies.token
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
         const user = await userService.findOne({ mail: decoded.mail })
-        if (decoded.role === user) {
+        if (decoded.role === "user") {
+            console.log(user._id)
             await userService.update(user._id, { role: "premium" })
             return res.status(200).clearCookie('token').redirect("/signin")
         }
