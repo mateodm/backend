@@ -208,6 +208,7 @@ class CartController {
             };
             await cartService.updateAndClear(cid);
             const mpresponse = await mercadopago.preferences.create(preference);
+            console.log(mpresponse)
             const body = { ...req.body, code: mpresponse.body.collector_id, amount: amount, product: successProducts };
             await ticketService.create(body);
             return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
