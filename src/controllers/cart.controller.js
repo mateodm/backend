@@ -205,7 +205,7 @@ class CartController {
             let createdTicket = await ticketService.create(body);
             await cartService.updateAndClear(cid);
             const preference = {
-                external_reference: createdTicket._id,
+                external_reference: createdTicket._id.toString(),
                 cid: cid,
                 items: items,
                 back_urls: {
