@@ -141,9 +141,9 @@ class CartController {
                     }
                 }
                 for (const product of successProducts) {
+                    product._doc.quantity = product.quantity;
                     let price = Number(product._doc.price) * Number(product.quantity);
                     amount = Number(amount) + Number(price);
-                    product._doc.quantity = product.quantity
                     const substract = Number(product._doc.stock) - Number(product.quantity);
                     await Products.findByIdAndUpdate(product._doc._id, { stock: substract });
                 }
