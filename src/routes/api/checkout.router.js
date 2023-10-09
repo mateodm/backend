@@ -12,8 +12,6 @@ const router = Router()
 router.post("/ticket", async (req, res) => {
     const body = req.body
     console.log(req.body)
-    console.log(req.headers)
-    console.log(req)
 })
 
 export default router
