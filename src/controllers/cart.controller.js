@@ -177,6 +177,7 @@ class CartController {
             const productsInCart = cart.products;
             const notStockP = [];
             const successProducts = [];
+            const tickets = await ticketService.getTickets();
             let amount = 0
             let code = 0;
             if (tickets.length > 0) {
@@ -184,7 +185,6 @@ class CartController {
             }
             const body = { ...req.body, code: code, amount: amount, product: successProducts };
             await ticketService.create(body);
-            const tickets = await ticketService.getTickets();
             for (const productInfo of productsInCart) {
                 const check = await productService.getById(productInfo.product._id);
                 if (check.stock >= productInfo.quantity) {
