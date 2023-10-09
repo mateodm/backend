@@ -183,8 +183,6 @@ class CartController {
             if (tickets.length > 0) {
                 code = Math.max(...tickets.map(ticket => Number(ticket.code))) + 1;
             }
-            const body = { ...req.body, code: code, amount: amount, product: successProducts };
-            await ticketService.create(body);
             for (const productInfo of productsInCart) {
                 const check = await productService.getById(productInfo.product._id);
                 if (check.stock >= productInfo.quantity) {
@@ -214,6 +212,8 @@ class CartController {
                 },
                 auto_return: "approved",
             };
+            const body = { ...req.body, code: code, amount: amount, product: successProducts };
+            await ticketService.create(body);
             await cartService.updateAndClear(cid);
             const mpresponse = await mercadopago.preferences.create(preference);
             return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
