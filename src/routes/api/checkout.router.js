@@ -16,7 +16,7 @@ router.post("/ticket", async (req, res) => {
     let paymentID = await mp.payment.get(id)
     console.log(paymentID)
     const preferenceId = paymentID.body.external_preference;
-    let ticket = await ticketService.getBy({code: preferenceId})
+    let ticket = await ticketService.getById(preferenceId)
     console.log(ticket)
 })
 
