@@ -197,6 +197,7 @@ class CartController {
                 quantity: product.quantity,
             }));
             const preference = {
+                external_reference: "20A",
                 cid: cid,
                 items: items,
                 back_urls: {
