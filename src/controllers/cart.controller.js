@@ -201,6 +201,7 @@ class CartController {
                 unit_price: Number(product._doc.price),
                 quantity: product.quantity,
             }));
+            const body = { ...req.body, code: code, amount: amount, product: successProducts };
             let createdTicket = await ticketService.create(body);
             await cartService.updateAndClear(cid);
             const preference = {
@@ -214,7 +215,6 @@ class CartController {
                 },
                 auto_return: "approved",
             };
-            const body = { ...req.body, code: code, amount: amount, product: successProducts };
             const mpresponse = await mercadopago.preferences.create(preference);
             return res.json({ success: true, products: successProducts, link: mpresponse.body.init_point })
 
