@@ -20,6 +20,14 @@ export default class TicketManager {
             console.log(e)
         }
     }
+    async getBy(id) {
+        try {
+            return await this.Ticket.findOne(id)
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
     async create(body) {
         return await this.Ticket.create(body)
     }

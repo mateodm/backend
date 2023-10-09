@@ -12,6 +12,9 @@ export default class TicketRepository {
     async getById(id) {
         return await this.ticketManager.getById(id);
     }
+    async getBy(id) {
+        return await this.ticketManager.getBy(id);
+    }
 
     async create(body) {
         return await this.ticketManager.create(body);
