@@ -16,13 +16,21 @@ export default class TicketManager {
         try {
             return await this.Ticket.findById(id)
         }
-        catch(e) {
+        catch (e) {
             console.log(e)
         }
     }
     async getBy(id) {
         try {
             return await this.Ticket.findOne(id)
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    async update(id, params) {
+        try {
+            return await this.Ticket.findByIdAndUpdate(id, params)
         }
         catch(e) {
             console.log(e)

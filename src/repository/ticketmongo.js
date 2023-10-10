@@ -23,4 +23,7 @@ export default class TicketRepository {
     async delete(id) {
         return await this.ticketManager.delete(id);
     }
+    async update(id, params) {
+        return await this.ticketManager.update(id, params)
+    }
 }

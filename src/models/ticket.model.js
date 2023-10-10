@@ -11,7 +11,7 @@ const ticket = new mongoose.Schema({
     type: Array,
     required: true,
   },
-  purchase_datetime: {
+  createorder_datetime: {
     type: Date,
     default: Date.now
   },
