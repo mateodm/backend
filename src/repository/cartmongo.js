@@ -24,7 +24,9 @@ export default class CartRepository {
     async update(cid, pid, quantity) {
         return await this.cartDAO.update(cid, pid, quantity);
     }
-
+    async updateById(cid, params) {
+        return await this.cartDAO.updateById(cid, params)
+    }
     async updateAndClear(cid) {
         return await this.cartDAO.updateAndClear(cid);
     }

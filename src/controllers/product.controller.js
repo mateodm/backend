@@ -30,7 +30,7 @@ class ProductController {
         const pageSize = 6;
         const skip = (page - 1) * pageSize;
         const titleRegex = new RegExp(title, 'i');
-        const count = await Products.countDocuments({ title: titleRegex });
+        const count = await productService.countDocuments({ title: titleRegex });
         const totalPages = Math.ceil(count / pageSize);
         const totalPagesArray = Array.from({ length: totalPages }, (_, index) => index + 1);
         const products = await Products.find({ title: titleRegex })

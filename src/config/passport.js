@@ -13,13 +13,8 @@ const GITHUB_CLIENTID = config.clientID
 const callback = "http://localhost:8080/api/auth/github/callback"
 
 export default function () {
-    passport.serializeUser((user, done) => done(null, user._id))
 
-    passport.deserializeUser(async (id, done) => {
-        const user = await userService.getById(id)
-        return done(null, user)
-    })
-    passport.use("register", new Strategy({ passReqToCallback: true, usernameField: "mail" }, async (req, username, password, done) => {
+    passport.use("register", new Strategy({ passReqToCallback: true, usernameField: "mail" }, async (req, username, done) => {
         try {
             let user = await userService.findOne({ mail: username })
             if (!user) {
@@ -68,30 +63,4 @@ passport.use('jwt', new jwt.Strategy({
         }
     })
 )
-/* passport.use(
-    'github',
-    new GHStrategy(
-        { clientID: GITHUB_CLIENTID ,clientSecret:SECRET_CLIENT,callbackURL:callback },
-        async (accessToken,refreshToken,profile,done) => {
-            try {
-                let check = await User.findOne({ mail:profile._json.login })
-                if (!check) {
-                    let user = await User.create({
-                        name:profile._json.name,
-                        mail:profile._json.login,
-                        age:18, 
-                        photo:profile._json.avatar_url,
-                        password:profile._json.id,
-                        role: 0,
-                    })
-                    return done(null,user)	
-                }
-                return done(null, check)		
-            } catch (error) {
-                return done(error)
-            }
-        }
-    )
-)
- */
 passport.authenticate("jwt", {session: false})

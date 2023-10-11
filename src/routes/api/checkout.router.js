@@ -14,7 +14,6 @@ router.post("/ticket", async (req, res) => {
     const body = req.body.data
     let id = body.id
     let paymentID = await mp.payment.get(id)
-    console.log(paymentID)
     const preferenceId = paymentID.body.external_reference;
     await ticketService.update(preferenceId, { status: "success"})
 })

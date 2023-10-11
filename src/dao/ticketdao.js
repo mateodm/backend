@@ -6,7 +6,7 @@ export default class TicketManager {
     }
     async getTickets() {
         try {
-            return await this.Ticket.find({})
+            return await this.Ticket.find({}).lean()
         }
         catch (e) {
             console.log(e)

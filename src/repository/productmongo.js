@@ -27,4 +27,7 @@ export default class ProductRepository {
     async find(body) {
         return await this.productManager.find(body)
     }
+    async countDocuments(body) {
+        return await this.productManager.countDocuments(body)
+    }
 }

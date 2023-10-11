@@ -32,4 +32,7 @@ export default class ProductManager {
     async find(body) {
         return await this.Products.find(body).lean()
     }
+    async countDocuments(body) {
+        return await this.Products.countDocuments(body)
+    }
 }

@@ -15,6 +15,7 @@ class userController {
     }
     async login(req, res) {
         try {
+            delete req.user.password
             return res.cookie('token',req.token,{maxAge:60*60*1000})
             .json({ success: true, status: 200 })
         }
@@ -25,6 +26,7 @@ class userController {
 
     async signout(req, res) {
         try {
+            delete req.user
             return res.status(200).clearCookie('token').redirect("/")
         }
         catch (error) {

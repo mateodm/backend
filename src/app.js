@@ -8,7 +8,6 @@ import { engine } from "express-handlebars"
 import { __dirname, __filename } from "./utils/utils.js"
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import cookieParser from "cookie-parser";
-import expressSession from "express-session"
 import mongoStore from "connect-mongo"
 import passport from "passport";
 import inicializePassport from "./config/passport.js"
@@ -22,25 +21,11 @@ mercadopago.configurations.setAccessToken(config.mercadopagoKey);
 
 /* VARS CONFIG */
 const cookiesName = config.cookie
-/* MERCADOPAGO */
-
-
-const URL = config.mongoUrl
 const secretSession = config.secretSession
 /* SERVER CONFIG */
 const server = express()
 server.use("/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 server.use(cookieParser(cookiesName))
-server.use(expressSession({
-    store: mongoStore.create({                       
-        mongoUrl: URL,ttl:10000
-         }),
-    secret: secretSession,
-    resave: true,
-    saveUninitialized: true
-}))
-
-/* Swagger */
 
 
 /* HANDLERBARS */
@@ -69,7 +54,6 @@ server.use(errorMidleware)
 server.use(notFoundHandler)
 inicializePassport()
 server.use(passport.initialize())
-server.use(passport.session())
 
 /* CONEXION CON MONGO DB*/
 config.connectMDB()

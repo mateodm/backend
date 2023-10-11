@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <table class="my-5 mb-5">
+            <thead>
+                <tr>
+                    <th>Nombre de usuario</th>
+                    <th>Mail</th>
+                    <th>Rol</th>
+                    <th>Borrar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{this.first_name}} </td>
+                    <td>{{this.mail}}</td>
+                    <td>{{this.role}}</td>
+                    <td><img class="tacho" onclick="deleteUser('{{_id}}')"
+                            src="https://img.freepik.com/vector-premium/eliminar-icono-boton-rojo-ilustracion-simbolo-bote-basura_692379-615.jpg?w=2000">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#roleModal-{{_id}}">
+                            Seleccionar Rol
+                        </button>
+                        <div class="modal fade" id="roleModal-{{_id}}" tabindex="-1" aria-labelledby="roleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="roleModalLabel">Change role</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="roleSelect" class="form-label">Rol:</label>
+                                                <select class="form-select" id="roleSelect-{{_id}}">
+                                                    <option value="user">user</option>
+                                                    <option value="premium">premium</option>
+                                                    <option value="admin">admin</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary" 
+                                            onclick="updateRole('{{_id}}')">Cambiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-2"></div>
+
+</div>
+
+
+
+
+
+
+<style>
+    .tacho {
+        width: 40px;
+    }
+
+    .tacho:hover {
+        opacity: 0.8;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .delete-icon {
+        color: red;
+        cursor: pointer;
+    }
+</style>

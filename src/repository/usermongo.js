@@ -4,12 +4,20 @@ export default class UserManager {
     constructor() {
         this.userManager = new userManager()
     }
+    async getUsers() {
+        try {
+            return await this.userManager.getUsers()
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
     async getById(id) {
         try {
             return await this.userManager.getById(id)
         }
         catch (e) {
-            console.log(error)
+            console.log(e)
         }
     }
     async findOne(param) {
@@ -20,11 +28,19 @@ export default class UserManager {
             console.log(e)
         }
     }
-    async update(id, param) {
+    async updateByMail(id, param) {
         try {
-            return await this.userManager.update(id, param)
+            return await this.userManager.updateByMail(id, param)
         }
         catch (e) {
+            console.log(e)
+        }
+    }
+    async updateRole(id, param) {
+        try {
+            return await this.userManager.updateRole(id, param)
+        }
+        catch(e) {
             console.log(e)
         }
     }

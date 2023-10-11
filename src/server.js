@@ -14,6 +14,7 @@ const ready = () => logger.info("Server ready in port " + PORT )
 const http_server = server.listen(PORT, ready)
 const socket_server = new Server(http_server)
 
+/* TODO EL SOCKET UTILIZADO A CONTINUACIÓN: */
 socket_server.on("connection", (socket) => {
     const cookies  = socket.handshake.query.cookies;
     if(cookies) {    

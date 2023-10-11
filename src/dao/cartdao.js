@@ -53,6 +53,9 @@ export default class CartManager {
             }
         });
     }
+    async updateById(cid, body) {
+        return await this.Carts.findByIdAndUpdate(cid, body)
+    }
 
     async updateAndClear(cid) {
         return await this.Carts.findOneAndUpdate({ _id: cid }, { $set: { products: [] } });

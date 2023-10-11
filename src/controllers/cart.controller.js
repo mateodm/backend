@@ -84,11 +84,10 @@ class CartController {
                 const cart = await cartService.getById(cid)
                 const products = cart.products
                 if (cid, pid) {
-                    const updatedCart = await Cart.findOneAndUpdate(
-                        { _id: cid },
+                    const updatedCart = await cartService.updateById(
+                        cid,
                         { $pull: { products: { product: pid } } },
-                        { new: true }
-                    ).populate("products.product", "title description stock thumbnail price code");
+                    )
                     return res.json({
                         success: true, status: 200, updatedCart
                     })
@@ -145,7 +144,7 @@ class CartController {
                     let price = Number(product._doc.price) * Number(product.quantity);
                     amount = Number(amount) + Number(price);
                     const substract = Number(product._doc.stock) - Number(product.quantity);
-                    await Products.findByIdAndUpdate(product._doc._id, { stock: substract });
+                    await productService.update(product._doc._id, { stock: substract });
                 }
                 const productRows = successProducts.map(product => `
                 <tr>
