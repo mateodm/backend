@@ -6,7 +6,9 @@
 <h2> POPULATES & INDEX</h2>
 <h2>IMPLEMENTACIÓN DE CAPAS</h2>
 <H2> MAILING </h2>
-<h2> Configuradas las ENV, utilizar ENV.DEVEPLOPMENT</h2>
+<h2> Configuradas las ENV</h2>
+<h2> Recuperar contraseñas <h2>
+<h2>Compra con mercadopago, si quieres obtener el ticket directamente pulsar el otro boton<h2>
 <ul>
 <h3><b>Rutas views</b></h3>
 <li>localhost:8080/products - <b>obtienes lista de productos</b></li>
@@ -27,6 +29,4 @@
 <li>METHOD POST: localhost:8080/api/products/post - <b>aquí es donde se envian los datos del formulario para crear el producto</b></li>
 <li>METHOD PUT: localhost:8080/api/products/:pid - <b>se actualiza un producto desde esta ruta</b></li>
 <li>METHOD DELETE: localhost:8080/api/products/:pid - <b>se elimina el producto indicado</b></li>
-<img src="./src/img/filter.png">
-<img src="./src/img/trabajopages.png">
 </ul>

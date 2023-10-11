@@ -1,25 +1,36 @@
 
-
 <form class="my-5" action="/api/products/post" method="POST" onsubmit="submitForm(event)">
-  <label for="title">Title:</label>
-  <input type="text" id="title" name="title" required>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title:</label>
+    <input type="text" id="title" name="title" class="form-control" required>
+  </div>
 
-  <label for="description">Description:</label>
-  <input type="text" id="description" name="description" required>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description:</label>
+    <input type="text" id="description" name="description" class="form-control" required>
+  </div>
 
-  <label for="price">Price:</label>
-  <input type="number" id="price" name="price" required>
+  <div class="mb-3">
+    <label for="price" class="form-label">Price:</label>
+    <input type="number" id="price" name="price" class="form-control" required>
+  </div>
 
-  <label for="thumbnail">Thumbnail:</label>
-  <input type="text" id="thumbnail" name="thumbnail" required>
+  <div class="mb-3">
+    <label for="thumbnail" class="form-label">Thumbnail:</label>
+    <input type="text" id="thumbnail" name="thumbnail" class="form-control" required>
+  </div>
 
-  <label for="code">Code:</label>
-  <input type="text" id="code" name="code" required>
+  <div class="mb-3">
+    <label for="code" class="form-label">Code:</label>
+    <input type="text" id="code" name="code" class="form-control" required>
+  </div>
 
-  <label for="stock">Stock:</label>
-  <input type="number" id="stock" name="stock" required>
+  <div class="mb-3">
+    <label for="stock" class="form-label">Stock:</label>
+    <input type="number" id="stock" name="stock" class="form-control" required>
+  </div>
 
-  <button type="submit">Submit</button>
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 <script>
