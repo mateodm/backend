@@ -22,31 +22,28 @@ function submitRegister(event) {
     },
     body: JSON.stringify(formData)
   })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success === true) {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          width:"300px",
-          heigth:"20px",
-          title: 'Has been registered succesfully',
-          showConfirmButton: false,
-          timer: 2500
-        })
-        window.location.href = '/signin'
-      } 
-      else if(data.success === false) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          width:"300px",
-          heigth:"20px",
-          text: data.cause,
-        })
-      }
-    })
-    .catch(error => {
-      console.error('Error de red:', error);
-    });
+  .then(response => response.json())
+  .then(response => {
+    if (response.success === true) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        width: "300px",
+        height: "20px",  
+        title: 'Has been registered succesfully',
+        showConfirmButton: false,
+        timer: 2500
+      });
+      window.location.href = '/signin';
+    } else if (response.success === false) { 
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        width: "300px", 
+        height: "20px",  
+        text: response.cause,
+      });
+    }
+  });
+  
 }

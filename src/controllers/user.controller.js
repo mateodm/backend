@@ -24,7 +24,7 @@ class userController {
             if (user) {
                 let token = await forgotMiddleware(email);
                 if (token) {
-                    let link = `http://localhost:8080/reset-password/${token}`
+                    let link = `http://localhost:8080/reset-password/${token} o https://backend-ecommerce-r1ay.onrender.com/${token}`
                     let message = `Reset your password here, the link expires in 1 hour: ${link}`;
                     await sendMail(req.body.mail, message);
                     return res.json({ status: 200, success: true })

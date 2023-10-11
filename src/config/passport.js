@@ -8,13 +8,14 @@ import config from "./config.js";
 
 const JWTStrategy = jwt.Strategy;
 
-const SECRET_CLIENT = config.secretClient
-const GITHUB_CLIENTID = config.clientID 
-const callback = "http://localhost:8080/api/auth/github/callback"
-
 export default function () {
+    passport.serializeUser((user, done) => done(null, user._id))
 
-    passport.use("register", new Strategy({ passReqToCallback: true, usernameField: "mail" }, async (req, username, done) => {
+    passport.deserializeUser(async (id, done) => {
+        const user = await userService.getById(id)
+        return done(null, user)
+    })
+    passport.use("register", new Strategy({ passReqToCallback: true, usernameField: "mail" }, async (req, username, password, done) => {
         try {
             let user = await userService.findOne({ mail: username })
             if (!user) {

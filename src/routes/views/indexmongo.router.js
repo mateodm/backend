@@ -89,8 +89,6 @@ router.get("/tickets", passport_call("jwt"), auth, async(req, res) => {
   const token = req.cookies.token
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const tickets = await ticketService.getTickets()
-  
-
   return res.render("ticketsView", {
     tickets: tickets, mail: decoded.mail, role: decoded.role
   })
