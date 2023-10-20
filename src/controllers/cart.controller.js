@@ -52,23 +52,25 @@ class CartController {
             let cid = req.params.cid;
             let pid = req.params.pid;
             let quantity = Number(req.body.quantity);
-            let cart = await cartService.getById(cid)
-            let product = await productService.getById(pid)
-            let stock = product.stock
-            let cartProducts = cart.products
-            let check = cartProducts.find(cart => cart.product === pid)
-            if (!check) {
-                if (quantity <= product.stock) {
-                    let update = await cartService.update(cid, pid, quantity)
-                    let getStock = await productService.getById(pid)
-                    return res.json({ success: true, status: 200, update: update })
-                }
-                else {
-                    CustomError.createError({ name: "Add product to the cart fail", cause: ["Not indicated stock available"], code: Errorss.INVALID_TYPE_ERROR })
+            if (quantity >= 1) {
+                let cart = await cartService.getById(cid)
+                let product = await productService.getById(pid)
+                let stock = product.stock
+                let cartProducts = cart.products
+                let check = cartProducts.find(cart => cart.product === pid)
+                if (!check) {
+                    if (quantity <= product.stock) {
+                        let update = await cartService.update(cid, pid, quantity)
+                        let getStock = await productService.getById(pid)
+                        return res.json({ success: true, status: 200, update: update })
+                    }
+                    else {
+                        CustomError.createError({ name: "Add product to the cart fail", cause: ["Not indicated stock available"], code: Errorss.INVALID_TYPE_ERROR })
+                    }
                 }
             }
             else {
-                CustomError.createError({ name: "Add product to the cart fail", cause: ["Product already in the cart"], code: Errorss.INVALID_TYPE_ERROR })
+                CustomError.createError({ name: "Add product to the cart fail", cause: ["Product already in the cart or you try to add negative quantity"], code: Errorss.INVALID_TYPE_ERROR })
             }
         }
         catch (error) {

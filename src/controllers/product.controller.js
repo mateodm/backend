@@ -27,7 +27,7 @@ class ProductController {
     async getProductsView(req, res) {
         const title = req.query.title || '';
         const page = parseInt(req.query.page) || 1;
-        const pageSize = 4;
+        const pageSize = 5;
         const skip = (page - 1) * pageSize;
         const titleRegex = new RegExp(title, 'i');
         const count = await productService.countDocuments({ title: titleRegex });
